@@ -279,7 +279,16 @@ body {
   font-size: 1rem; transition: background .2s;
   overflow: hidden;
 }
-.pr-icon.has-img { font-size: 0; }
+.pr-icon.has-img { font-size: 0; background-size: cover; background-position: center; }
+.pr-icon.has-img:not([style*="background-image"]) {
+  background-image: none !important;
+  background-color: var(--cream2);
+  animation: skeleton-pulse .9s ease-in-out infinite alternate;
+}
+@keyframes skeleton-pulse {
+  from { background-color: var(--cream2); }
+  to   { background-color: #e0d8c8; }
+}
 .product-row.active .pr-icon { box-shadow: 0 0 0 2px var(--gold); }
 .pr-info { flex: 1; min-width: 0; }
 .pr-name {
@@ -3126,17 +3135,21 @@ function sendWhatsApp() {
   window.open(url, '_blank');
 }
 
-/* ══ LAZY LOADING للصور ══ */
+/* ══ LAZY LOADING — thumbnails على كل آيتم ══ */
 (function() {
+  function thumbSrc(imgPath) {
+    const stem = imgPath.split('/').pop().replace(/\.[^.]+$/, '');
+    return 'assets/thumbs/' + stem + '.webp';
+  }
+
   function initLazy() {
-    const icons = document.querySelectorAll('.pr-icon');
-    icons.forEach(el => {
-      const s = el.getAttribute('style') || '';
-      const m = s.match(/background-image\s*:\s*url\(['"]?([^'")\s]+)['"]?\)/);
-      if (m) {
-        el.dataset.bg = m[1];
-        el.style.backgroundImage = 'none';
-      }
+    const rows = document.querySelectorAll('.product-row[data-img]');
+    rows.forEach(row => {
+      const icon = row.querySelector('.pr-icon');
+      if (!icon) return;
+      icon.dataset.bg = thumbSrc(row.dataset.img);
+      icon.textContent = '';
+      icon.classList.add('has-img');
     });
 
     const io = new IntersectionObserver(entries => {
@@ -3146,9 +3159,9 @@ function sendWhatsApp() {
           io.unobserve(e.target);
         }
       });
-    }, { rootMargin: '300px' });
+    }, { rootMargin: '400px' });
 
-    icons.forEach(el => { if (el.dataset.bg) io.observe(el); });
+    document.querySelectorAll('.pr-icon[data-bg]').forEach(el => io.observe(el));
   }
 
   if (document.readyState === 'loading') {
