@@ -2863,13 +2863,18 @@ function updateHero(img, name, desc, price) {
   if (heroImg.getAttribute('src') === cleanSrc) return;
   heroImg.classList.add('fade-out');
   heroCaption.classList.add('fade-out');
-  const tmp = new Image();
-  tmp.onload = () => {
+  let loaded = false, timerDone = false;
+  function doSwap() {
+    if (!loaded || !timerDone) return;
     heroImg.src = cleanSrc;
     heroImg.classList.remove('fade-out');
     heroCaption.classList.remove('fade-out');
-  };
+  }
+  const tmp = new Image();
+  tmp.onload = () => { loaded = true; doSwap(); };
+  tmp.onerror = () => { loaded = true; doSwap(); };
   tmp.src = cleanSrc;
+  setTimeout(() => { timerDone = true; doSwap(); }, 350);
 }
 
 /* preload only first image per category — fast & light */
