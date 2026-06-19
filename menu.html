@@ -2846,17 +2846,28 @@ const catCounts = { crepe: '16 صنف', waffle: '12 صنف', pancake: '9 أصن�
 
 const heroCaption = document.getElementById('hero-caption');
 function updateHero(img, name, desc, price) {
+  const cleanSrc = img.split('?')[0];
+  heroName.textContent = name;
+  heroDesc.textContent = desc;
+  heroPrice.textContent = price;
+  if (heroImg.src.endsWith(cleanSrc) || heroImg.src === cleanSrc) return;
   heroImg.classList.add('fade-out');
   heroCaption.classList.add('fade-out');
   setTimeout(() => {
-    heroImg.src = img.split('?')[0] + '?v=' + Date.now();
-    heroName.textContent = name;
-    heroDesc.textContent = desc;
-    heroPrice.textContent = price;
+    heroImg.src = cleanSrc;
     heroImg.classList.remove('fade-out');
     heroCaption.classList.remove('fade-out');
-  }, 380);
+  }, 300);
 }
+
+/* preload all hero images after splash */
+function preloadHeroImages() {
+  document.querySelectorAll('.product-row[data-img]').forEach(row => {
+    const src = row.dataset.img.split('?')[0];
+    if (src) { const i = new Image(); i.src = src; }
+  });
+}
+setTimeout(preloadHeroImages, 3000);
 
 rows.forEach(row => {
   row.addEventListener('click', (e) => {
