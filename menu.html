@@ -2850,24 +2850,28 @@ function updateHero(img, name, desc, price) {
   heroName.textContent = name;
   heroDesc.textContent = desc;
   heroPrice.textContent = price;
-  if (heroImg.src.endsWith(cleanSrc) || heroImg.src === cleanSrc) return;
+  if (heroImg.getAttribute('src') === cleanSrc) return;
   heroImg.classList.add('fade-out');
   heroCaption.classList.add('fade-out');
-  setTimeout(() => {
+  const tmp = new Image();
+  tmp.onload = () => {
     heroImg.src = cleanSrc;
     heroImg.classList.remove('fade-out');
     heroCaption.classList.remove('fade-out');
-  }, 300);
+  };
+  tmp.src = cleanSrc;
 }
 
-/* preload all hero images after splash */
-function preloadHeroImages() {
-  document.querySelectorAll('.product-row[data-img]').forEach(row => {
-    const src = row.dataset.img.split('?')[0];
-    if (src) { const i = new Image(); i.src = src; }
+/* preload only first image per category — fast & light */
+(function preloadCategoryThumbs() {
+  const seen = new Set();
+  document.querySelectorAll('.cat-group').forEach(g => {
+    const first = g.querySelector('.product-row[data-img]');
+    if (!first) return;
+    const src = first.dataset.img.split('?')[0];
+    if (src && !seen.has(src)) { seen.add(src); new Image().src = src; }
   });
-}
-setTimeout(preloadHeroImages, 3000);
+})();
 
 rows.forEach(row => {
   row.addEventListener('click', (e) => {
