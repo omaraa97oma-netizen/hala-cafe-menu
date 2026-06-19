@@ -3099,6 +3099,38 @@ function sendWhatsApp() {
   const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
 }
+
+/* ══ LAZY LOADING للصور ══ */
+(function() {
+  function initLazy() {
+    const icons = document.querySelectorAll('.pr-icon');
+    icons.forEach(el => {
+      const s = el.getAttribute('style') || '';
+      const m = s.match(/background-image\s*:\s*url\(['"]?([^'")\s]+)['"]?\)/);
+      if (m) {
+        el.dataset.bg = m[1];
+        el.style.backgroundImage = 'none';
+      }
+    });
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting && e.target.dataset.bg) {
+          e.target.style.backgroundImage = `url('${e.target.dataset.bg}')`;
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '300px' });
+
+    icons.forEach(el => { if (el.dataset.bg) io.observe(el); });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLazy);
+  } else {
+    initLazy();
+  }
+})();
 </script>
 
 <!-- DELIVERY LOCATION MODAL -->
