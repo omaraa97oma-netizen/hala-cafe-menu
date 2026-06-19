@@ -3124,40 +3124,19 @@ function sendWhatsApp() {
   window.open(url, '_blank');
 }
 
-/* ══ LAZY LOADING — thumbnails على كل آيتم ══ */
+/* ══ PRELOAD first image per category for instant switching ══ */
 (function() {
-  function thumbSrc(imgPath) {
-    const stem = imgPath.split('/').pop().replace(/\.[^.]+$/, '');
-    return 'assets/thumbs/' + stem + '.webp';
-  }
-
-  function initLazy() {
-    const rows = document.querySelectorAll('.product-row[data-img]');
-    rows.forEach(row => {
-      const icon = row.querySelector('.pr-icon');
-      if (!icon) return;
-      icon.dataset.bg = thumbSrc(row.dataset.img);
-      icon.textContent = '';
-      icon.classList.add('has-img');
+  function run() {
+    const seen = new Set();
+    document.querySelectorAll('.cat-group').forEach(g => {
+      const first = g.querySelector('.product-row[data-img]');
+      if (!first) return;
+      const src = first.dataset.img;
+      if (src && !seen.has(src)) { seen.add(src); new Image().src = src; }
     });
-
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting && e.target.dataset.bg) {
-          e.target.style.backgroundImage = `url('${e.target.dataset.bg}')`;
-          io.unobserve(e.target);
-        }
-      });
-    }, { rootMargin: '400px' });
-
-    document.querySelectorAll('.pr-icon[data-bg]').forEach(el => io.observe(el));
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLazy);
-  } else {
-    initLazy();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
 })();
 </script>
 
