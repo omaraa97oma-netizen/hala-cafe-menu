@@ -1,0 +1,3119 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>هلا كافيه — المنيو</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ═══════════════════ RESET & VARS ═══════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream:    #FAF8F3;
+  --cream2:   #F2EDE2;
+  --olive:    #2D3A1E;
+  --olive-m:  #3E5128;
+  --olive-l:  #546B35;
+  --gold:     #C9A855;
+  --gold-l:   #E2C47A;
+  --gold-d:   #A8893E;
+  --white:    #FFFFFF;
+  --text:     #1C2410;
+  --text-mid: #4A5535;
+  --shadow:   0 8px 40px rgba(45,58,30,.12);
+  --shadow-l: 0 2px 12px rgba(45,58,30,.07);
+  --left-w:   45%;
+  --right-w:  55%;
+}
+html, body { height: 100%; }
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ═══════════════════ SPLASH BLOB ════════════════════════ */
+#splash {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: all;
+}
+#blob-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+#splash-inner {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  opacity: 0;
+  animation: blobContentIn 0.5s ease 0.4s forwards;
+}
+@keyframes blobContentIn {
+  from { opacity:0; transform: scale(.85); }
+  to   { opacity:1; transform: scale(1); }
+}
+#splash-logo-img {
+  width: 100px; height: 100px; border-radius: 50%; object-fit: cover;
+  border: 3px solid var(--gold);
+  box-shadow: 0 8px 32px rgba(201,168,85,.4);
+}
+#splash-title {
+  font-family: 'El Messiri', serif;
+  font-size: clamp(1.8rem, 6vw, 2.8rem); font-weight: 700;
+  color: var(--olive);
+}
+#splash-subtitle {
+  font-size: .95rem; color: var(--text-mid); font-weight: 400;
+}
+#splash.exit {
+  animation: splashFadeOut 0.6s ease 2s forwards;
+  pointer-events: none;
+}
+@keyframes splashFadeOut {
+  to { opacity: 0; }
+}
+
+/* ═══════════════════ DESKTOP SPLIT LAYOUT ═══════════════ */
+#app {
+  display: flex;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* LEFT PANEL */
+#left-panel {
+  position: relative;
+  flex: 0 0 var(--left-w);
+  overflow: hidden;
+  background: var(--olive);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#hero-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  transition: opacity .4s ease, transform .45s ease;
+}
+#hero-img.fade-out { opacity: 0; transform: scale(1.04); }
+#hero-caption { transition: opacity .35s ease, transform .35s ease; }
+#hero-caption.fade-out { opacity: 0; transform: translateY(6px); }
+#left-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(45,58,30,.55) 0%,
+    rgba(45,58,30,.1) 40%,
+    rgba(45,58,30,.7) 80%,
+    rgba(28,36,16,.95) 100%
+  );
+  z-index: 1;
+}
+#left-brand {
+  position: relative; z-index: 2; align-self: flex-end;
+  display: flex; align-items: center; gap: 12px;
+  padding: 20px 22px;
+}
+#left-logo {
+  width: 48px; height: 48px; border-radius: 50%;
+  object-fit: cover; border: 2px solid var(--gold);
+  flex-shrink: 0;
+}
+#left-brand-text {
+  font-family: 'El Messiri', serif;
+  font-size: 1.15rem; font-weight: 700;
+  color: var(--white); line-height: 1.2;
+}
+#left-brand-text small {
+  display: block; font-family: 'Cairo', sans-serif;
+  font-size: .7rem; font-weight: 400;
+  color: var(--gold-l); letter-spacing: .5px;
+}
+#deco-text {
+  position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+  writing-mode: vertical-rl; text-orientation: mixed;
+  font-family: 'El Messiri', serif;
+  font-size: .85rem; letter-spacing: 4px; font-weight: 600;
+  color: rgba(201,168,85,.45); z-index: 2;
+  user-select: none;
+}
+#hero-caption {
+  position: relative; width: 100%;
+  z-index: 2; padding: 28px 24px;
+}
+#hero-product-name {
+  font-family: 'El Messiri', serif;
+  font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700;
+  color: var(--white); line-height: 1.2;
+  transition: opacity .3s;
+}
+#hero-product-desc {
+  font-size: .85rem; color: rgba(255,255,255,.75);
+  margin-top: 6px; font-weight: 300;
+  transition: opacity .3s;
+}
+#hero-product-price {
+  display: inline-flex; align-items: center;
+  margin-top: 12px;
+  background: var(--gold); color: var(--olive);
+  font-size: .9rem; font-weight: 700;
+  padding: 6px 18px; border-radius: 50px;
+  transition: opacity .3s;
+}
+#wa-left {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 16px;
+  color: #25D366; font-size: .82rem; font-weight: 600;
+  text-decoration: none; width: fit-content;
+  background: rgba(255,255,255,.1); padding: 7px 14px;
+  border-radius: 50px; border: 1px solid rgba(37,211,102,.3);
+  transition: background .2s;
+}
+#wa-left:hover { background: rgba(37,211,102,.15); }
+#wa-left svg { width: 18px; height: 18px; fill: #25D366; flex-shrink: 0; }
+
+/* RIGHT PANEL */
+#right-panel {
+  flex: 0 0 var(--right-w);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+/* Category Nav */
+#cat-nav-wrap {
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--cream2);
+  position: relative;
+}
+#cat-nav-wrap::after {
+  content: '';
+  position: absolute; top: 0; left: 0; bottom: 1px;
+  width: 40px; pointer-events: none; z-index: 2;
+  background: linear-gradient(to right, var(--cream) 50%, transparent);
+}
+#cat-nav {
+  padding: 10px 16px 8px;
+  display: flex; flex-direction: row;
+  gap: 7px; overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) transparent;
+}
+#cat-nav::-webkit-scrollbar { height: 3px; }
+#cat-nav::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
+#cat-nav::-webkit-scrollbar-track { background: transparent; }
+.cat-btn {
+  flex-shrink: 0; padding: 6px 16px; border-radius: 50px;
+  border: 1.5px solid var(--cream2);
+  background: var(--white); color: var(--text-mid);
+  font-family: 'Cairo', sans-serif; font-size: .85rem; font-weight: 600;
+  cursor: pointer; transition: all .2s; white-space: nowrap;
+}
+.cat-btn:hover {
+  background: var(--cream2); color: var(--olive);
+  border-color: var(--gold);
+}
+.cat-btn.active {
+  background: var(--gold); color: var(--olive);
+  border-color: var(--gold);
+}
+
+/* Right Header title */
+#right-header {
+  flex-shrink: 0;
+  padding: 14px 24px 4px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+#right-title {
+  font-family: 'El Messiri', serif;
+  font-size: 1.1rem; font-weight: 700; color: var(--olive);
+}
+#right-count {
+  font-size: .78rem; color: var(--text-mid); font-weight: 500;
+  background: var(--cream2); padding: 3px 10px; border-radius: 50px;
+}
+
+/* Scrollable product list */
+#product-list {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding: 8px 0 40px;
+  scrollbar-width: thin; scrollbar-color: var(--cream2) transparent;
+}
+#product-list::-webkit-scrollbar { width: 4px; }
+#product-list::-webkit-scrollbar-track { background: transparent; }
+#product-list::-webkit-scrollbar-thumb { background: var(--cream2); border-radius: 4px; }
+
+/* Category group */
+.cat-group { padding: 0 0 12px; display: none; }
+.cat-group.show { display: block; }
+.cat-group-title {
+  font-family: 'El Messiri', serif;
+  font-size: .95rem; font-weight: 700; color: var(--olive-l);
+  padding: 12px 24px 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.cat-group-title::after {
+  content: ''; flex: 1; height: 1px; background: var(--cream2);
+}
+
+/* Product row */
+.product-row {
+  display: flex; align-items: center;
+  padding: 11px 24px; gap: 12px;
+  cursor: pointer; transition: background .18s;
+  border-radius: 0;
+  position: relative;
+}
+.product-row:hover { background: rgba(45,58,30,.04); }
+.product-row.active { background: rgba(201,168,85,.1); }
+.product-row.active::before {
+  content: ''; position: absolute; right: 0; top: 20%; bottom: 20%;
+  width: 3px; background: var(--gold); border-radius: 3px 0 0 3px;
+}
+.pr-icon {
+  width: 48px; height: 48px; border-radius: 10px;
+  background: var(--cream2) center/cover no-repeat; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: background .2s;
+  overflow: hidden;
+}
+.pr-icon.has-img { font-size: 0; }
+.product-row.active .pr-icon { box-shadow: 0 0 0 2px var(--gold); }
+.pr-info { flex: 1; min-width: 0; }
+.pr-name {
+  font-size: .95rem; font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pr-desc {
+  font-size: .75rem; color: var(--text-mid); font-weight: 400;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-top: 1px;
+}
+.pr-price {
+  font-size: .88rem; font-weight: 700; color: var(--gold-d);
+  white-space: nowrap; flex-shrink: 0;
+  font-family: 'Cairo', sans-serif;
+}
+.product-row.active .pr-price { color: var(--olive); }
+
+/* ═══════════════════ MOBILE LAYOUT ══════════════════════ */
+@media (max-width: 768px) {
+  html, body { height: 100%; overflow: hidden; }
+  #app { flex-direction: column; height: 100dvh; overflow: hidden; }
+
+  /* ── Hero panel compact at top ── */
+  #left-panel { flex: 0 0 180px; width: 100%; min-height: 0; }
+  #mobile-topbar { display: none !important; }
+
+  /* ── Right panel fills remaining height ── */
+  #right-panel { flex: 1; min-height: 0; width: 100%; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* ── Nav ── */
+  #cat-nav { padding: 8px 12px 6px; gap: 6px; -webkit-overflow-scrolling: touch; }
+  .cat-btn { padding: 6px 14px; font-size: .78rem; min-height: 34px; touch-action: manipulation; }
+
+  /* ── Section header ── */
+  #right-header { padding: 6px 14px 2px; }
+  #right-title { font-size: .95rem; }
+  #right-count { font-size: .7rem; }
+
+  /* ── Product list scrollable ── */
+  #product-list {
+    flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; padding: 0 0 100px;
+  }
+
+  /* ── Product rows ── */
+  .product-row { padding: 9px 14px; gap: 10px; min-height: 58px; touch-action: manipulation; }
+  .pr-icon { width: 50px; height: 50px; font-size: .85rem; border-radius: 9px; }
+  .pr-name { font-size: .86rem; }
+  .pr-desc { font-size: .68rem; }
+  .pr-price { font-size: .8rem; }
+  .pr-add { width: 28px; height: 28px; font-size: 1.1rem; }
+
+  /* ── Cart FAB ── */
+  #cart-fab { bottom: 16px; right: 16px; width: 54px; height: 54px; }
+  #cart-fab svg { width: 22px; height: 22px; }
+
+  /* ── Cart sheet ── */
+  #cart-sheet { max-height: 88vh; padding: 0 16px 28px; }
+  #wa-left { display: none; }
+  #add-to-cart-btn { display: none; }
+}
+
+@keyframes waPulse {
+  0%,100% { box-shadow: 0 6px 20px rgba(37,211,102,.45); }
+  50%      { box-shadow: 0 6px 30px rgba(37,211,102,.7); }
+}
+
+/* ═══════════════════ ADD + BUTTON ON ROW ════════════════ */
+.pr-add {
+  flex-shrink: 0;
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1.5px solid var(--gold);
+  background: transparent; color: var(--gold);
+  font-size: 1.2rem; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .18s; margin-right: 6px;
+}
+.pr-add:hover { background: var(--gold); color: var(--olive); }
+.pr-add.added { background: var(--gold); color: var(--olive); }
+
+/* Add to cart button in left panel */
+#add-to-cart-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 12px;
+  background: var(--gold); color: var(--olive);
+  font-family: 'Cairo', sans-serif;
+  font-size: .88rem; font-weight: 800;
+  padding: 9px 22px; border-radius: 50px;
+  border: none; cursor: pointer;
+  transition: background .2s, transform .12s;
+  box-shadow: 0 4px 16px rgba(201,168,85,.35);
+}
+#add-to-cart-btn:hover { background: var(--gold-l); }
+#add-to-cart-btn:active { transform: scale(.95); }
+
+/* Cart FAB */
+#cart-fab {
+  position: fixed; bottom: 20px; right: 20px; z-index: 300;
+  width: 58px; height: 58px; border-radius: 50%;
+  background: var(--olive); border: 2.5px solid var(--gold);
+  display: none; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 28px rgba(45,58,30,.45);
+  transition: transform .2s;
+}
+#cart-fab:hover { transform: scale(1.06); }
+#cart-fab svg { width: 24px; height: 24px; fill: var(--gold); }
+#cart-fab-count {
+  position: absolute; top: -5px; left: -5px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--gold); color: var(--olive);
+  font-size: .65rem; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--cream);
+}
+
+/* Cart Drawer */
+#cart-drawer {
+  position: fixed; inset: 0; z-index: 500;
+  display: none; align-items: flex-end;
+}
+#cart-drawer.open { display: flex; }
+#cart-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(28,36,16,.55);
+  backdrop-filter: blur(3px);
+  cursor: pointer;
+}
+#cart-sheet {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 500px;
+  margin: 0 auto;
+  background: var(--cream);
+  border-radius: 24px 24px 0 0;
+  padding: 0 20px 32px;
+  max-height: 82vh;
+  display: flex; flex-direction: column;
+  animation: sheetUp .3s cubic-bezier(.22,1,.36,1);
+}
+@keyframes sheetUp {
+  from { transform: translateY(60%); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+#cart-handle {
+  width: 40px; height: 4px; border-radius: 4px;
+  background: var(--cream2); margin: 14px auto 16px;
+}
+#cart-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; padding-top: 4px;
+}
+#cart-title {
+  font-family: 'El Messiri', serif;
+  font-size: 1.1rem; font-weight: 700; color: var(--olive);
+}
+#cart-close {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--cream2); border: none; cursor: pointer;
+  font-size: 1rem; color: var(--text-mid);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+#cart-close:hover { background: var(--cream); }
+#cart-items-wrap { flex: 1; overflow-y: auto; margin-bottom: 12px; }
+.cart-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 0; border-bottom: 1px solid var(--cream2);
+}
+.cart-row-name { flex: 1; font-size: .9rem; font-weight: 600; color: var(--text); }
+.cart-row-price { font-size: .85rem; font-weight: 700; color: var(--gold-d); white-space: nowrap; }
+.cart-row-del {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #fee2e2; border: none; cursor: pointer;
+  font-size: .85rem; color: #dc2626;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background .18s;
+}
+.cart-row-del:hover { background: #fca5a5; }
+.qty-ctrl { display: flex; align-items: center; gap: 7px; }
+.qty-btn {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--cream2); border: none; cursor: pointer;
+  font-size: .9rem; font-weight: 800; color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .18s;
+}
+.qty-btn:hover { background: var(--gold); color: var(--olive); }
+.qty-num { font-size: .9rem; font-weight: 800; color: var(--text); min-width: 18px; text-align: center; }
+
+/* Table number modal */
+#table-modal {
+  position: fixed; inset: 0; z-index: 900;
+  display: none; align-items: center; justify-content: center;
+  background: rgba(28,36,16,.6); backdrop-filter: blur(3px);
+}
+#table-modal.open { display: flex; }
+#table-box {
+  background: var(--white); border-radius: 20px;
+  padding: 28px 24px; width: 90%; max-width: 340px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  text-align: center; font-family: 'Cairo', sans-serif;
+  animation: slideUp .3s ease;
+}
+#table-box h3 {
+  font-family: 'El Messiri', serif; font-size: 1.2rem;
+  color: var(--olive); margin-bottom: 6px;
+}
+#table-box p { font-size: .85rem; color: var(--text-mid); margin-bottom: 18px; }
+#table-input {
+  width: 100%; padding: 12px 16px; border-radius: 12px;
+  border: 2px solid var(--cream2); font-size: 1.1rem;
+  font-family: 'Cairo', sans-serif; text-align: center;
+  outline: none; box-sizing: border-box; margin-bottom: 16px;
+  transition: border-color .2s;
+}
+#table-input:focus { border-color: var(--gold); }
+#table-confirm-btn {
+  width: 100%; padding: 13px; border-radius: 12px;
+  background: #25D366; border: none; color: #fff;
+  font-family: 'Cairo', sans-serif; font-size: 1rem;
+  font-weight: 800; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; gap: 8px;
+  transition: background .2s;
+}
+#table-confirm-btn:hover { background: #1ebe5d; }
+#table-cancel-btn {
+  width: 100%; padding: 10px; border-radius: 12px;
+  background: transparent; border: none; color: var(--text-mid);
+  font-family: 'Cairo', sans-serif; font-size: .88rem;
+  cursor: pointer; margin-top: 8px;
+}
+#table-cancel-btn:hover { color: var(--text); }
+#cart-total-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 13px 0; border-top: 2px solid var(--cream2); margin-bottom: 14px;
+}
+#cart-total-lbl { font-size: .9rem; font-weight: 600; color: var(--text-mid); }
+#cart-total-amt { font-size: 1.15rem; font-weight: 900; color: var(--olive); }
+#location-wrap {
+  margin-bottom: 12px;
+}
+#location-wrap label {
+  display: block; font-size: .82rem; font-weight: 700;
+  color: var(--text-mid); margin-bottom: 6px;
+}
+#location-input {
+  width: 100%; padding: 11px 14px; border-radius: 12px;
+  border: 2px solid var(--cream2); font-size: .9rem;
+  font-family: 'Cairo', sans-serif; box-sizing: border-box;
+  outline: none; transition: border-color .2s; resize: none;
+  color: var(--text);
+}
+#location-input:focus { border-color: var(--gold); }
+#location-input::placeholder { color: #bbb; }
+#send-wa-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 14px;
+  background: #25D366; border: none; border-radius: 14px;
+  color: #fff; font-family: 'Cairo', sans-serif;
+  font-size: .95rem; font-weight: 800;
+  cursor: pointer; text-decoration: none;
+  transition: background .2s, transform .12s;
+}
+#send-wa-btn:hover { background: #1ebe5d; }
+#send-wa-btn:active { transform: scale(.97); }
+#send-wa-btn svg { width: 22px; height: 22px; fill: #fff; }
+#cart-empty-msg {
+  text-align: center; padding: 36px 0;
+  color: var(--text-mid); font-size: .9rem; display: none;
+}
+</style>
+
+<!-- PROFESSIONAL UI FIXES -->
+<style>
+/* DESKTOP FIXES */
+#left-overlay {
+  background: linear-gradient(to left, rgba(20,25,10, 0.95) 0%, rgba(20,25,10, 0.8) 45%, transparent 100%) !important;
+}
+#left-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-height: 450px !important;
+}
+#left-brand, #hero-caption {
+  position: relative !important;
+}
+
+/* MOBILE FIXES */
+@media (max-width: 768px) {
+  #left-panel {
+    flex: 0 0 260px !important; /* Increased height to prevent overlap */
+    min-height: 260px !important;
+    background: #0f1307 !important;
+    display: block !important;
+  }
+  #hero-img {
+    width: 60% !important;
+    height: 100% !important;
+    left: 0 !important;
+    right: auto !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    -webkit-mask-image: linear-gradient(to left, transparent 0%, black 35%) !important;
+    mask-image: linear-gradient(to left, transparent 0%, black 35%) !important;
+  }
+  #left-overlay { display: none !important; }
+  #left-brand {
+    position: absolute !important;
+    top: 15px !important;
+    right: 15px !important;
+    width: 45% !important;
+    padding: 0 !important;
+  }
+  #left-logo {
+    width: 38px !important;
+    height: 38px !important;
+  }
+  #left-brand-text {
+    font-size: 1rem !important;
+  }
+  #left-brand-text small {
+    font-size: 0.65rem !important;
+  }
+  #hero-caption {
+    position: absolute !important;
+    bottom: 15px !important;
+    right: 15px !important;
+    width: 45% !important;
+    padding: 0 !important;
+  }
+  #hero-product-name {
+    font-size: 1.1rem !important;
+    line-height: 1.2 !important;
+  }
+  #hero-product-desc {
+    margin-top: 4px !important;
+    font-size: 0.72rem !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+  #hero-product-price {
+    margin-top: 8px !important;
+    padding: 5px 14px !important;
+    font-size: 0.8rem !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ═════════════════ SPLASH ═════════════════════════════ -->
+<div id="splash">
+  <canvas id="blob-canvas"></canvas>
+  <div id="splash-inner">
+    <img id="splash-logo-img" src="assets/logo.jpg" alt="هلا كافيه" />
+    <div id="splash-title">هلا كافيه</div>
+    <div id="splash-subtitle">يالتسوى عندي الدنيا كلها</div>
+  </div>
+</div>
+
+<!-- mobile-topbar is placed inside #app below -->
+
+<!-- ═════════════ MOBILE ITEM SHEET (hidden on desktop) ═══ -->
+<div id="mobile-item-sheet" style="display:none;">
+  <div id="mobile-sheet-backdrop"></div>
+  <div id="mobile-sheet-card">
+    <button id="mobile-sheet-close">✕</button>
+    <img id="mobile-sheet-img" src="" alt="">
+    <div id="mobile-sheet-body">
+      <div id="mobile-sheet-name"></div>
+      <div id="mobile-sheet-desc"></div>
+      <div id="mobile-sheet-footer">
+        <div id="mobile-sheet-price"></div>
+        <button id="mobile-sheet-add">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1zM10 6a2 2 0 0 1 4 0v1h-4V6zm8 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9h2v1a1 1 0 0 0 2 0V9h4v1a1 1 0 0 0 2 0V9h2v10z"/></svg>
+          أضف للطلب
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════ APP ═════════════════════════════════ -->
+<div id="app">
+
+  <!-- MOBILE TOP BAR (hidden on desktop via CSS) -->
+  <div id="mobile-topbar" style="display:none;">
+    <img src="assets/logo.jpg" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;" alt="">
+    <div style="color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.95rem;line-height:1.2;">
+      هلا كافيه <br><small style="font-weight:400;font-size:.72rem;opacity:.8;">HALA CAFE</small>
+    </div>
+  </div>
+
+  <!-- LEFT PANEL -->
+  <div id="left-panel">
+    <img id="hero-img" src="assets/hot_espresso_single.png" alt="" />
+    <div id="left-overlay"></div>
+    <div id="left-brand">
+      <img id="left-logo" src="assets/logo.jpg" alt="هلا كافيه" />
+      <div id="left-brand-text">
+        هلا كافيه
+        <small>HALA CAFE</small>
+      </div>
+    </div>
+    <div id="deco-text">هلا كافيه · كل رشفة نقلة</div>
+    <div id="hero-caption">
+      <div id="hero-product-name">اسبريسو سنجل</div>
+      <div id="hero-product-desc">إسبريسو نقي أصيل من أجود حبوب البن</div>
+      <div id="hero-product-price">2,000 د.ع</div>
+      <button id="add-to-cart-btn" onclick="addCurrentToCart()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1zM10 6a2 2 0 0 1 4 0v1h-4V6zm8 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9h2v1a1 1 0 0 0 2 0V9h4v1a1 1 0 0 0 2 0V9h2v10z"/></svg>
+        أضف للطلب
+      </button>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div id="right-panel">
+    <!-- Category nav -->
+    <div id="cat-nav-wrap">
+    <nav id="cat-nav">
+      <button class="cat-btn active" data-cat="crepe">🫔 كريب</button>
+      <button class="cat-btn" data-cat="waffle">🧇 وافل</button>
+      <button class="cat-btn" data-cat="pancake">🥞 بان كيك</button>
+      <button class="cat-btn" data-cat="cheesecake">🍰 تشيز كيك</button>
+      <button class="cat-btn" data-cat="brownies">🍫 براونيز</button>
+      <button class="cat-btn" data-cat="juices2">🍹 عصائر</button>
+      <button class="cat-btn" data-cat="cocktail">🍹 كوكتيل</button>
+      <button class="cat-btn" data-cat="smoothie">🥤 سموذي</button>
+      <button class="cat-btn" data-cat="milkshake">🥛 ميلك شيك</button>
+      <button class="cat-btn" data-cat="mojito">🍃 موهيتو</button>
+      <button class="cat-btn" data-cat="energy">⚡ مشروبات الطاقة</button>
+      <button class="cat-btn" data-cat="icedcoffee">☕ القهوة المثلجة</button>
+      <button class="cat-btn" data-cat="frappe">🥤 الفرابيه</button>
+      <button class="cat-btn" data-cat="icecream">🍨 ايس كريم والفواكه والمكسرات</button>
+      <button class="cat-btn" data-cat="hot2">☕ المشروبات الساخنة</button>
+      <button class="cat-btn" data-cat="hookah">💨 الاراكيل</button>
+      <button class="cat-btn" data-cat="sansebastian">🍮 سان سباستيان</button>
+    </nav>
+    </div>
+
+    <!-- Section header -->
+    <div id="right-header">
+      <div id="right-title">كريب</div>
+      <div id="right-count">16 صنف</div>
+    </div>
+
+    <!-- Product list -->
+    <div id="product-list">
+
+            <!-- CREPE -->
+      <div class="cat-group show" data-cat="crepe">
+        <div class="cat-group-title">🫔 كريب</div>
+
+        <div class="product-row active"
+             data-img="assets/crepe_chocolate.png"
+             data-name="كريب شوكولا"
+             data-desc="كريب طري مغطى بالشوكولا الغنية اللذيذة"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">كريب شوكولا</div>
+            <div class="pr-desc">كريب طري بالشوكولا الغنية</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_belgian.png"
+             data-name="كريب بلجيكي"
+             data-desc="كريب طري مغطى بالشوكولا البلجيكية الفاخرة"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">كريب بلجيكي</div>
+            <div class="pr-desc">كريب بلجيكي بالكريمة والمربى</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_oreo.png"
+             data-name="كريب أوريو"
+             data-desc="كريب بصوص الشوكولا وقطع بسكويت الأوريو المقرمش والكريمة"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">كريب أوريو</div>
+            <div class="pr-desc">كريب بالأوريو المكسّر والكريمة</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_lotus.png"
+             data-name="كريب لوتس"
+             data-desc="كريب بصوص زبدة اللوتس وبسكويت اللوتس اللذيذ"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">كريب لوتس</div>
+            <div class="pr-desc">كريب باللوتس الكريمي اللذيذ</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_pistachio.png"
+             data-name="كريب بستاشيو"
+             data-desc="كريب غني بصوص الفستق الحلبي الفاخر والفستق المطحون"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">كريب بستاشيو</div>
+            <div class="pr-desc">كريب بكريمة الفستق الحلبي</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_kinder.png"
+             data-name="كريب كندر"
+             data-desc="كريب بصوص الشوكولا مغطى بقطع شوكولاتة كندر الأصيلة"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">كريب كندر</div>
+            <div class="pr-desc">كريب بكريمة الكندر اللذيذة</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_banana_roll.png"
+             data-name="كريب بنانا رول"
+             data-desc="رول كريب محشي بقطع الموز الطازجة والشوكولا الغنية"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">كريب بنانا رول</div>
+            <div class="pr-desc">رول كريب محشي بالموز والشوكولا</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_bugja.png"
+             data-name="بقجة كريب"
+             data-desc="صرة كريب محشية بالكريمة الغنية والشوكولا ومزينة بالفواكه"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">بقجة كريب</div>
+            <div class="pr-desc">بقجة كريب محشية بالكريمة والشوكولا</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_fettuccine.png"
+             data-name="فوتوشيني كريب"
+             data-desc="شرائط كريب فوتوشيني غارقة بثلاثة أنواع من الشوكولا الفاخرة"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">فوتوشيني كريب</div>
+            <div class="pr-desc">شرائط كريب فوتوشيني بصوص الشوكولا</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_sushi.png"
+             data-name="سوشي كريب"
+             data-desc="رولات كريب مقطعة على طريقة السوشي محشية بالكريمة والشوكولا"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">سوشي كريب</div>
+            <div class="pr-desc">رولات كريب مقطعة على طريقة السوشي</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_fruits.png"
+             data-name="كريب فواكه"
+             data-desc="كريب محشي بالفراولة، الموز، والكيوي مع صوص الشوكولا اللذيذ"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">كريب فواكه</div>
+            <div class="pr-desc">كريب محشي بالفواكه الموسمية الطازجة</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_nuts.png"
+             data-name="كريب مكسرات"
+             data-desc="كريب غني بالشوكولا والمكسرات المحمصة المقرمشة"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">كريب مكسرات</div>
+            <div class="pr-desc">كريب محشي بالشوكولا والمكسرات المشكلة</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_ice.png"
+             data-name="آيس كريب"
+             data-desc="كريب دافئ مغطى ببولة آيس كريم الفانيلا الباردة وصوص الشوكولا"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">آيس كريب</div>
+            <div class="pr-desc">كريب مغطى بآيس كريم الفانيلا والشوكولا</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_roll.png"
+             data-name="كريب رول"
+             data-desc="رول كريب محشي بالكريمة ومغطى بصوص الشوكولا الغنية"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">كريب رول</div>
+            <div class="pr-desc">كريب رول بصوص الشوكولا اللذيذ</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_ouzi.png"
+             data-name="كريب قوزي"
+             data-desc="صرة كريب محشية بالموز والشوكولا والكريمة على شكل أوزي"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">كريب قوزي</div>
+            <div class="pr-desc">كريب محشي على شكل صرة أوزي بالكريمة</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/crepe_hala.png"
+             data-name="كريب هلا"
+             data-desc="كريب هلا كافيه المميز بثلاثة أنواع من الشوكولا والخلطة الخاصة"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">🫔</div>
+          <div class="pr-info">
+            <div class="pr-name">كريب هلا</div>
+            <div class="pr-desc">كريب هلا كافيه الخاص بالخلطة المميزة</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- WAFFLE -->
+      <div class="cat-group" data-cat="waffle">
+        <div class="cat-group-title">🧇 وافل</div>
+
+        <div class="product-row"
+             data-img="assets/waffle_chocolate_special.png"
+             data-name="وافل شوكولا"
+             data-desc="وافل دافئ مغطى بنوتيلا الشوكولاتة الغنية اللذيذة"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🧇</div>
+          <div class="pr-info">
+            <div class="pr-name">وافل شوكولا</div>
+            <div class="pr-desc">وافل دافئ مغطى بالشوكولاتة الغنية اللذيذة</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/waffle_belgian.png"
+             data-name="وافل بلجيكي"
+             data-desc="وافل بلجيكي مقرمش مغطى بالشوكولاتة البلجيكية الفاخرة"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">🧇</div>
+          <div class="pr-info">
+            <div class="pr-name">وافل بلجيكي</div>
+            <div class="pr-desc">وافل بلجيكي مقرمش مغطى بالشوكولاتة البلجيكية الفاخرة</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/waffle_oreo.png"
+             data-name="وافل اوريو"
+             data-desc="وافل مقرمش مزين بقطع بسكويت الأوريو وصوص الشوكولاتة"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🧇</div>
+          <div class="pr-info">
+            <div class="pr-name">وافل اوريو</div>
+            <div class="pr-desc">وافل مقرمش مزين بقطع بسكويت الأوريو وصوص الشوكولاتة</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/waffle_lotus.png"
+             data-name="وافل لوتس"
+             data-desc="وافل مقرمش مغطى بصوص زبدة اللوتس وبسكويت اللوتس المقرمش"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🧇</div>
+          <div class="pr-info">
+            <div class="pr-name">وافل لوتس</div>
+            <div class="pr-desc">وافل مقرمش مغطى بصوص زبدة اللوتس وبسكويت اللوتس المقرمش</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/waffle_kinder.png"
+             data-name="وافل كندر"
+             data-desc="وافل لذيذ مغطى بقطع كندر وصوص الشوكولاتة الفاخرة"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🧇</div>
+          <div class="pr-info">
+            <div class="pr-name">وافل كندر</div>
+            <div class="pr-desc">وافل لذيذ مغطى بقطع كندر وصوص الشوكولاتة الفاخرة</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/waffle_pistachio.png"
+             data-name="وافل بستاشيو"
+             data-desc="وافل فاخر مغطى بصوص الفستق الحلبي وقطع الفستق المحمص"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🧇</div>
+          <div class="pr-info">
+            <div class="pr-name">وافل بستاشيو</div>
+            <div class="pr-desc">وافل فاخر مغطى بصوص الفستق الحلبي وقطع الفستق المحمص</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/waffle_mixed.png"
+             data-name="وافل مكس"
+             data-desc="وافل مكس مقرمش مغطى بتشكيلة من أنواع الشوكولاتة البلجيكية"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🧇</div>
+          <div class="pr-info">
+            <div class="pr-name">وافل مكس</div>
+            <div class="pr-desc">وافل مكس مقرمش مغطى بتشكيلة من أنواع الشوكولاتة البلجيكية</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/waffle_pineapple.png"
+             data-name="وافل اناناس"
+             data-desc="وافل طازج مزين بقطع الأناناس وصوص الفواكه الاستوائية"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🧇</div>
+          <div class="pr-info">
+            <div class="pr-name">وافل اناناس</div>
+            <div class="pr-desc">وافل طازج مزين بقطع الأناناس وصوص الفواكه الاستوائية</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/waffle_banana.png"
+             data-name="وافل موز"
+             data-desc="وافل مقرمش مزين بقطع الموز الطازجة والعسل الطبيعي والشوكولاتة"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🧇</div>
+          <div class="pr-info">
+            <div class="pr-name">وافل موز</div>
+            <div class="pr-desc">وافل مقرمش مزين بقطع الموز الطازجة والعسل الطبيعي والشوكولاتة</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/waffle_fruits.png"
+             data-name="وافل فواكه"
+             data-desc="وافل مقرمش مغطى بقطع الفواكه الطازجة المشكلة وصوص الشوكولاتة"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🧇</div>
+          <div class="pr-info">
+            <div class="pr-name">وافل فواكه</div>
+            <div class="pr-desc">وافل مقرمش مغطى بقطع الفواكه الطازجة المشكلة وصوص الشوكولاتة</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/waffle_nuts.png"
+             data-name="وافل مكسرات"
+             data-desc="وافل مقرمش غني بصوص الشوكولاتة والمكسرات المحمصة المقرمشة"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">🧇</div>
+          <div class="pr-info">
+            <div class="pr-name">وافل مكسرات</div>
+            <div class="pr-desc">وافل مقرمش غني بصوص الشوكولاتة والمكسرات المحمصة المقرمشة</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/waffle_hala.png"
+             data-name="وافل هلا"
+             data-desc="وافل هلا المميز بالخلطة الخاصة والمزين بثلاثة أنواع من الشوكولاتة الفاخرة"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">🧇</div>
+          <div class="pr-info">
+            <div class="pr-name">وافل هلا</div>
+            <div class="pr-desc">وافل هلا المميز بالخلطة الخاصة والمزين بثلاثة أنواع من الشوكولاتة الفاخرة</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- PANCAKE -->
+      <div class="cat-group" data-cat="pancake">
+        <div class="cat-group-title">🥞 بان كيك</div>
+
+        <div class="product-row"
+             data-img="assets/pancake_chocolate_sharp.png"
+             data-name="بان كيك شوكولا"
+             data-desc="طبقات من البان كيك الهش المغطى بصوص الشوكولاتة الغنية"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🥞</div>
+          <div class="pr-info">
+            <div class="pr-name">بان كيك شوكولا</div>
+            <div class="pr-desc">طبقات من البان كيك الهش المغطى بصوص الشوكولاتة الغنية</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/pancake_belgian_sharp.png"
+             data-name="بان كيك بلجيكي"
+             data-desc="بان كيك دافئ مغطى بالشوكولاتة البلجيكية الفاخرة"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">🥞</div>
+          <div class="pr-info">
+            <div class="pr-name">بان كيك بلجيكي</div>
+            <div class="pr-desc">بان كيك دافئ مغطى بالشوكولاتة البلجيكية الفاخرة</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/pancake_kinder_sharp.png"
+             data-name="بان كيك كندر"
+             data-desc="بان كيك هش مغطى بقطع الكندر وصوص الشوكولاتة اللذيذة"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">🥞</div>
+          <div class="pr-info">
+            <div class="pr-name">بان كيك كندر</div>
+            <div class="pr-desc">بان كيك هش مغطى بقطع الكندر وصوص الشوكولاتة اللذيذة</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/pancake_lotus_sharp.png"
+             data-name="بان كيك لوتس"
+             data-desc="بان كيك مغطى بصوص زبدة اللوتس وبسكويت اللوتس المقرمش"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">🥞</div>
+          <div class="pr-info">
+            <div class="pr-name">بان كيك لوتس</div>
+            <div class="pr-desc">بان كيك مغطى بصوص زبدة اللوتس وبسكويت اللوتس المقرمش</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/pancake_oreo_sharp.png"
+             data-name="بان كيك اوريو"
+             data-desc="بان كيك مميز بقطع بسكويت الأوريو وصوص الشوكولاتة والكريمة"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">🥞</div>
+          <div class="pr-info">
+            <div class="pr-name">بان كيك اوريو</div>
+            <div class="pr-desc">بان كيك مميز بقطع بسكويت الأوريو وصوص الشوكولاتة والكريمة</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/pancake_pistachio_sharp.png"
+             data-name="بان كيك بستاشيو"
+             data-desc="بان كيك غني بصوص الفستق الحلبي الفاخر وقطع الفستق المحمص"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">🥞</div>
+          <div class="pr-info">
+            <div class="pr-name">بان كيك بستاشيو</div>
+            <div class="pr-desc">بان كيك غني بصوص الفستق الحلبي الفاخر وقطع الفستق المحمص</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/pancake_fruits_sharp.png"
+             data-name="بان كيك فواكه"
+             data-desc="بان كيك طازج مغطى بقطع الفواكه المشكلة وصوص الشوكولاتة"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">🥞</div>
+          <div class="pr-info">
+            <div class="pr-name">بان كيك فواكه</div>
+            <div class="pr-desc">بان كيك طازج مغطى بقطع الفواكه المشكلة وصوص الشوكولاتة</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/pancake_mixed_sharp.png"
+             data-name="بان كيك مكس مني"
+             data-desc="ميني بان كيك مكس بقطع صغيرة مغطى بتشكيلة الشوكولاتة البلجيكية"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">🥞</div>
+          <div class="pr-info">
+            <div class="pr-name">بان كيك مكس مني</div>
+            <div class="pr-desc">ميني بان كيك مكس بقطع صغيرة مغطى بتشكيلة الشوكولاتة البلجيكية</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/pancake_hala_sharp.png"
+             data-name="بان كيك هلا"
+             data-desc="بان كيك هلا كافيه الخاص بخلطتنا وثلاثة أنواع من الشوكولاتة"
+             data-price="10,000 د.ع">
+          <div class="pr-icon">🥞</div>
+          <div class="pr-info">
+            <div class="pr-name">بان كيك هلا</div>
+            <div class="pr-desc">بان كيك هلا كافيه الخاص بخلطتنا وثلاثة أنواع من الشوكولاتة</div>
+          </div>
+          <div class="pr-price">10,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- CHEESECAKE -->
+      <div class="cat-group" data-cat="cheesecake">
+        <div class="cat-group-title">🍰 تشيز كيك</div>
+
+        <div class="product-row"
+             data-img="assets/cheesecake_chocolate.png"
+             data-name="تشيز كيك شوكولا"
+             data-desc="تشيز كيك بارد مغطى بصوص الشوكولاتة الغنية"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🍰</div>
+          <div class="pr-info">
+            <div class="pr-name">تشيز كيك شوكولا</div>
+            <div class="pr-desc">تشيز كيك بارد مغطى بصوص الشوكولاتة الغنية</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/cheesecake_lotus.png"
+             data-name="تشيز كيك لوتس"
+             data-desc="تشيز كيك ناعم مغطى بزبدة اللوتس وبسكويت اللوتس المقرمش"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🍰</div>
+          <div class="pr-info">
+            <div class="pr-name">تشيز كيك لوتس</div>
+            <div class="pr-desc">تشيز كيك ناعم مغطى بزبدة اللوتس وبسكويت اللوتس المقرمش</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/cheesecake_kinder.png"
+             data-name="تشيز كيك كندر"
+             data-desc="تشيز كيك غني مغطى بقطع الكندر وصوص الكاكاو اللذيذ"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🍰</div>
+          <div class="pr-info">
+            <div class="pr-name">تشيز كيك كندر</div>
+            <div class="pr-desc">تشيز كيك غني مغطى بقطع الكندر وصوص الكاكاو اللذيذ</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/cheesecake_oreo.png"
+             data-name="تشيز كيك اوريو"
+             data-desc="تشيز كيك كريمي مع قطع بسكويت الأوريو المطحونة"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🍰</div>
+          <div class="pr-info">
+            <div class="pr-name">تشيز كيك اوريو</div>
+            <div class="pr-desc">تشيز كيك كريمي مع قطع بسكويت الأوريو المطحونة</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/cheesecake_pistachio.png"
+             data-name="تشيز كيك بستاشيو"
+             data-desc="تشيز كيك فاخر مغطى بكريمة الفستق الحلبي وقطع الفستق"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🍰</div>
+          <div class="pr-info">
+            <div class="pr-name">تشيز كيك بستاشيو</div>
+            <div class="pr-desc">تشيز كيك فاخر مغطى بكريمة الفستق الحلبي وقطع الفستق</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/cheesecake_strawberry.png"
+             data-name="تشيز كيك فراولة"
+             data-desc="تشيز كيك كلاسيكي مغطى بقطع الفراولة الطازجة وصوص الفراولة"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🍰</div>
+          <div class="pr-info">
+            <div class="pr-name">تشيز كيك فراولة</div>
+            <div class="pr-desc">تشيز كيك كلاسيكي مغطى بقطع الفراولة الطازجة وصوص الفراولة</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/cheesecake_berry.png"
+             data-name="تشيز كيك توت"
+             data-desc="تشيز كيك بارد مغطى بصوص التوت البري اللذيذ"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🍰</div>
+          <div class="pr-info">
+            <div class="pr-name">تشيز كيك توت</div>
+            <div class="pr-desc">تشيز كيك بارد مغطى بصوص التوت البري اللذيذ</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- BROWNIES -->
+      <div class="cat-group" data-cat="brownies">
+        <div class="cat-group-title">🍫 براونيز</div>
+
+        <div class="product-row"
+             data-img="assets/brownie_chocolate.png?v=1781859046"
+             data-name="براونيز شوكولا"
+             data-desc="قطع البراونيز الكلاسيكية الغنية بشوكولاتة الفادج الداكنة"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🍫</div>
+          <div class="pr-info">
+            <div class="pr-name">براونيز شوكولا</div>
+            <div class="pr-desc">قطع البراونيز الكلاسيكية الغنية بشوكولاتة الفادج الداكنة</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/brownie_sauce.png?v=1781859046"
+             data-name="براونيز صوصات"
+             data-desc="قطع البراونيز اللذيذة المغطاة بصوص الشوكولاتة والكراميل والكريمة"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">🍫</div>
+          <div class="pr-info">
+            <div class="pr-name">براونيز صوصات</div>
+            <div class="pr-desc">قطع البراونيز اللذيذة المغطاة بصوص الشوكولاتة والكراميل والكريمة</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/brownie_banana.png?v=1781859046"
+             data-name="بنانا براونيز"
+             data-desc="براونيز شوكولاتة دافئ مزين بقطع الموز وصوص الشوكولاتة"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🍫</div>
+          <div class="pr-info">
+            <div class="pr-name">بنانا براونيز</div>
+            <div class="pr-desc">براونيز شوكولاتة دافئ مزين بقطع الموز وصوص الشوكولاتة</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+
+        <div class="product-row"
+             data-img="assets/brownie_fondue.png?v=1781859046"
+             data-name="فوندوم"
+             data-desc="كيك فوندوم الشوكولاتة الفرنسي الفاخر السائل من الداخل"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🍫</div>
+          <div class="pr-info">
+            <div class="pr-name">فوندوم</div>
+            <div class="pr-desc">كيك فوندوم الشوكولاتة الفرنسي الفاخر السائل من الداخل</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+      </div>
+
+      <div class="cat-group" data-cat="juices2">
+        <div class="cat-group-title">🍹 عصائر</div>
+
+        <div class="product-row"
+             data-img="assets/juice_orange_v3.webp?v=1781891397"
+             data-name="عصير برتقال"
+             data-desc="عصير برتقال طازج معصور لحظياً"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍊</div>
+          <div class="pr-info">
+            <div class="pr-name">عصير برتقال</div>
+            <div class="pr-desc">عصير برتقال طازج معصور لحظياً</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/juice_lemon.png"
+             data-name="عصير ليمون"
+             data-desc="عصير ليمون منعش بارد"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍋</div>
+          <div class="pr-info">
+            <div class="pr-name">عصير ليمون</div>
+            <div class="pr-desc">عصير ليمون منعش بارد</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/juice_pineapple.png"
+             data-name="عصير اناناس"
+             data-desc="عصير أناناس استوائي طازج"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍍</div>
+          <div class="pr-info">
+            <div class="pr-name">عصير اناناس</div>
+            <div class="pr-desc">عصير أناناس استوائي طازج</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/juice_melon.png"
+             data-name="عصير بطيخ"
+             data-desc="عصير بطيخ منعش بارد"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍉</div>
+          <div class="pr-info">
+            <div class="pr-name">عصير بطيخ</div>
+            <div class="pr-desc">عصير بطيخ منعش بارد</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/juice_strawberry.png"
+             data-name="عصير فراولة"
+             data-desc="عصير فراولة طازج حلو"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍓</div>
+          <div class="pr-info">
+            <div class="pr-name">عصير فراولة</div>
+            <div class="pr-desc">عصير فراولة طازج حلو</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/juice_watermelon.png"
+             data-name="عصير ركي"
+             data-desc="عصير ركي منعش طازج"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">عصير ركي</div>
+            <div class="pr-desc">عصير ركي منعش طازج</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/juice_apple.png"
+             data-name="عصير تفاح"
+             data-desc="عصير تفاح طازج بارد"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍎</div>
+          <div class="pr-info">
+            <div class="pr-name">عصير تفاح</div>
+            <div class="pr-desc">عصير تفاح طازج بارد</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/juice_banana.png"
+             data-name="عصير موز"
+             data-desc="عصير موز كريمي لذيذ"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍌</div>
+          <div class="pr-info">
+            <div class="pr-name">عصير موز</div>
+            <div class="pr-desc">عصير موز كريمي لذيذ</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/juice_mango.png"
+             data-name="عصير منكا"
+             data-desc="عصير منكا منعش لذيذ"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">عصير منكا</div>
+            <div class="pr-desc">عصير منكا منعش لذيذ</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- COCKTAIL -->
+      <div class="cat-group" data-cat="cocktail">
+        <div class="cat-group-title">🍹 كوكتيل</div>
+
+        <div class="product-row"
+             data-img="assets/cocktail_banana_milk.webp?v=1781880083"
+             data-name="موز وحليب"
+             data-desc="موز طازج مع الحليب الكريمي"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">موز وحليب</div>
+            <div class="pr-desc">موز طازج مع الحليب الكريمي</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/cocktail_orange_lemon.webp?v=1781880083"
+             data-name="برتقال وليمون"
+             data-desc="برتقال وليمون طازجين منعشين"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">برتقال وليمون</div>
+            <div class="pr-desc">برتقال وليمون طازجين منعشين</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/cocktail_banana_strawberry.webp?v=1781880083"
+             data-name="موز وحليب وفراولة"
+             data-desc="كوكتيل الموز والحليب مع الفراولة الطازجة"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">موز وحليب وفراولة</div>
+            <div class="pr-desc">كوكتيل الموز والحليب مع الفراولة الطازجة</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/cocktail_banana_nutella.webp?v=1781880083"
+             data-name="موز وحليب ونوتيلا"
+             data-desc="كوكتيل الموز والحليب مع شوكولاتة نوتيلا الغنية"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">موز وحليب ونوتيلا</div>
+            <div class="pr-desc">كوكتيل الموز والحليب مع شوكولاتة نوتيلا الغنية</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/cocktail_strawberry_chocolate.webp?v=1781880083"
+             data-name="ستروبيري شوكولا"
+             data-desc="ستروبيري طازج مع الشوكولاتة اللذيذة"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">ستروبيري شوكولا</div>
+            <div class="pr-desc">ستروبيري طازج مع الشوكولاتة اللذيذة</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/cocktail_fruit_mix.webp?v=1781880083"
+             data-name="فواكه مشكلة"
+             data-desc="كوكتيل فواكه مشكلة منعشة"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">فواكه مشكلة</div>
+            <div class="pr-desc">كوكتيل فواكه مشكلة منعشة</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/cocktail_tropical.webp?v=1781880083"
+             data-name="كوكتيل استوائي"
+             data-desc="كوكتيل منعش من الفواكه الاستوائية اللذيذة"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">كوكتيل استوائي</div>
+            <div class="pr-desc">كوكتيل منعش من الفواكه الاستوائية اللذيذة</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/cocktail_summer_fresh.webp?v=1781880083"
+             data-name="سمر فريش"
+             data-desc="مشروب صيفي منعش مميز"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">سمر فريش</div>
+            <div class="pr-desc">مشروب صيفي منعش مميز</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/cocktail_melody.webp?v=1781880083"
+             data-name="ميلودي"
+             data-desc="كوكتيل ميلودي المميز بالطبقات الغنية"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلودي</div>
+            <div class="pr-desc">كوكتيل ميلودي المميز بالطبقات الغنية</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/cocktail_white_kline.webp?v=1781880083"
+             data-name="وايت كلاين"
+             data-desc="وايت كلاين الفاخر والمنعش"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">وايت كلاين</div>
+            <div class="pr-desc">وايت كلاين الفاخر والمنعش</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/cocktail_emperor.webp?v=1781880083"
+             data-name="الامبراطور"
+             data-desc="كوكتيل الإمبراطور الفاخر بالقطع والمكسرات"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🍹</div>
+          <div class="pr-info">
+            <div class="pr-name">الامبراطور</div>
+            <div class="pr-desc">كوكتيل الإمبراطور الفاخر بالقطع والمكسرات</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/cocktail_avocado_chocolate.webp?v=1781880083"
+             data-name="افوكادو شوكولا"
+             data-desc="أفوكادو بالشوكولا الغنية"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🥑</div>
+          <div class="pr-info">
+            <div class="pr-name">افوكادو شوكولا</div>
+            <div class="pr-desc">أفوكادو بالشوكولا الغنية</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/cocktail_avocado.png?v=1781859879"
+             data-name="افوكادو فواكه"
+             data-desc="أفوكادو بالفواكه المنوعة"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🥑</div>
+          <div class="pr-info">
+            <div class="pr-name">افوكادو فواكه</div>
+            <div class="pr-desc">أفوكادو بالفواكه المنوعة</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- SMOOTHIE -->
+      <div class="cat-group" data-cat="smoothie">
+        <div class="cat-group-title">🥤 سموذي</div>
+
+        <div class="product-row"
+             data-img="assets/smoothie_strawberry.png?v=1781860262"
+             data-name="سموذي فراولة"
+             data-desc="سموذي فراولة طازج ومنعش"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🥤</div>
+          <div class="pr-info">
+            <div class="pr-name">سموذي فراولة</div>
+            <div class="pr-desc">سموذي فراولة طازج ومنعش</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/smoothie_blueberry.png?v=1781860262"
+             data-name="سموذي بلوبيري"
+             data-desc="سموذي بلوبيري غني ومنعش"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🥤</div>
+          <div class="pr-info">
+            <div class="pr-name">سموذي بلوبيري</div>
+            <div class="pr-desc">سموذي بلوبيري غني ومنعش</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/smoothie_pineapple.png?v=1781860262"
+             data-name="سموذي اناناس"
+             data-desc="سموذي الأناناس الاستوائي"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🥤</div>
+          <div class="pr-info">
+            <div class="pr-name">سموذي اناناس</div>
+            <div class="pr-desc">سموذي الأناناس الاستوائي</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/smoothie_mango.png?v=1781860262"
+             data-name="سموذي مانجو"
+             data-desc="سموذي المانجو الاستوائي"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🥤</div>
+          <div class="pr-info">
+            <div class="pr-name">سموذي مانجو</div>
+            <div class="pr-desc">سموذي المانجو الاستوائي</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/smoothie_peach.png?v=1781860262"
+             data-name="سموذي خوخ"
+             data-desc="سموذي الخوخ الحلو المنعش"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🥤</div>
+          <div class="pr-info">
+            <div class="pr-name">سموذي خوخ</div>
+            <div class="pr-desc">سموذي الخوخ الحلو المنعش</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/smoothie_watermelon.png?v=1781860262"
+             data-name="سموذي بطيخ"
+             data-desc="سموذي البطيخ المنعش"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🥤</div>
+          <div class="pr-info">
+            <div class="pr-name">سموذي بطيخ</div>
+            <div class="pr-desc">سموذي البطيخ المنعش</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/smoothie_lemon_mint.png?v=1781860262"
+             data-name="سموذي ليمون ونعناع"
+             data-desc="سموذي الليمون بالنعناع المنعش"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🥤</div>
+          <div class="pr-info">
+            <div class="pr-name">سموذي ليمون ونعناع</div>
+            <div class="pr-desc">سموذي الليمون بالنعناع المنعش</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/smoothie_vimto_ai.webp?v=1781883141"
+             data-name="سموذي فيمتو"
+             data-desc="سموذي الفيمتو المنعش"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🥤</div>
+          <div class="pr-info">
+            <div class="pr-name">سموذي فيمتو</div>
+            <div class="pr-desc">سموذي الفيمتو المنعش</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- MILKSHAKE -->
+      <div class="cat-group" data-cat="milkshake">
+        <div class="cat-group-title">🥛 ميلك شيك</div>
+
+        <div class="product-row"
+             data-img="assets/milkshake_vanilla.png?v=1781859879"
+             data-name="ميلك شيك فانيلا"
+             data-desc="ميلك شيك الفانيلا الكلاسيك"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🥛</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلك شيك فانيلا</div>
+            <div class="pr-desc">ميلك شيك الفانيلا الكلاسيك</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/milkshake_chocolate.png"
+             data-name="ميلك شيك شوكولا"
+             data-desc="ميلك شيك الشوكولا الغني"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🥛</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلك شيك شوكولا</div>
+            <div class="pr-desc">ميلك شيك الشوكولا الغني</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/milkshake_bounty.png"
+             data-name="ميلك شيك باونتي"
+             data-desc="ميلك شيك الباونتي بجوز الهند"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🥛</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلك شيك باونتي</div>
+            <div class="pr-desc">ميلك شيك الباونتي بجوز الهند</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/milkshake_twix_ai.webp?v=1781883554"
+             data-name="ميلك شيك تويكس"
+             data-desc="ميلك شيك التويكس الكريمي"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🥛</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلك شيك تويكس</div>
+            <div class="pr-desc">ميلك شيك التويكس الكريمي</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/milkshake_lotus_ai.webp?v=1781883554"
+             data-name="ميلك شيك لوتس"
+             data-desc="ميلك شيك اللوتس الكريمي"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🥛</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلك شيك لوتس</div>
+            <div class="pr-desc">ميلك شيك اللوتس الكريمي</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/milkshake_oreo.png"
+             data-name="ميلك شيك اوريو"
+             data-desc="ميلك شيك الأوريو المكسّر"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🥛</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلك شيك اوريو</div>
+            <div class="pr-desc">ميلك شيك الأوريو المكسّر</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/milkshake_kinder.png"
+             data-name="ميلك شيك كيندر"
+             data-desc="ميلك شيك الكيندر الحلو"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🥛</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلك شيك كيندر</div>
+            <div class="pr-desc">ميلك شيك الكيندر الحلو</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/milkshake_pistachio.png"
+             data-name="ميلك شيك بستاشيو"
+             data-desc="ميلك شيك الفستق الحلبي"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🥛</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلك شيك بستاشيو</div>
+            <div class="pr-desc">ميلك شيك الفستق الحلبي</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/milkshake_strawberry.png"
+             data-name="ميلك شيك فراولة"
+             data-desc="ميلك شيك الفراولة الطازجة"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🥛</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلك شيك فراولة</div>
+            <div class="pr-desc">ميلك شيك الفراولة الطازجة</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/milkshake_coffee.png"
+             data-name="ميلك شيك قهوة"
+             data-desc="ميلك شيك القهوة المميزة"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🥛</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلك شيك قهوة</div>
+            <div class="pr-desc">ميلك شيك القهوة المميزة</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/milkshake_caramel.png"
+             data-name="ميلك شيك كراميل"
+             data-desc="ميلك شيك الكراميل اللذيذ"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🥛</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلك شيك كراميل</div>
+            <div class="pr-desc">ميلك شيك الكراميل اللذيذ</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/milkshake_blue.png"
+             data-name="ميلك شيك بلو"
+             data-desc="ميلك شيك بلو المميز"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🥛</div>
+          <div class="pr-info">
+            <div class="pr-name">ميلك شيك بلو</div>
+            <div class="pr-desc">ميلك شيك بلو المميز</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- MOJITO -->
+      <div class="cat-group" data-cat="mojito">
+        <div class="cat-group-title">🍃 موهيتو</div>
+
+        <div class="product-row"
+             data-img="assets/mojito_strawberry.png"
+             data-name="موهيتو فراولة"
+             data-desc="موهيتو الفراولة المنعش"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍃</div>
+          <div class="pr-info">
+            <div class="pr-name">موهيتو فراولة</div>
+            <div class="pr-desc">موهيتو الفراولة المنعش</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/mojito_mint.png"
+             data-name="موهيتو نعناع"
+             data-desc="موهيتو النعناع الكلاسيك"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍃</div>
+          <div class="pr-info">
+            <div class="pr-name">موهيتو نعناع</div>
+            <div class="pr-desc">موهيتو النعناع الكلاسيك</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/mojito_blueberry.png"
+             data-name="موهيتو بلوبيري"
+             data-desc="موهيتو البلوبيري المنعش"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍃</div>
+          <div class="pr-info">
+            <div class="pr-name">موهيتو بلوبيري</div>
+            <div class="pr-desc">موهيتو البلوبيري المنعش</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/mojito_bobi.png"
+             data-name="موهيتو بوبي"
+             data-desc="موهيتو بوبي المميز"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍃</div>
+          <div class="pr-info">
+            <div class="pr-name">موهيتو بوبي</div>
+            <div class="pr-desc">موهيتو بوبي المميز</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/mojito_mango.png"
+             data-name="موهيتو مانكو"
+             data-desc="موهيتو المانجو الاستوائي"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍃</div>
+          <div class="pr-info">
+            <div class="pr-name">موهيتو مانكو</div>
+            <div class="pr-desc">موهيتو المانجو الاستوائي</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/mojito_peach.png"
+             data-name="موهيتو خوخ"
+             data-desc="موهيتو الخوخ المنعش"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍃</div>
+          <div class="pr-info">
+            <div class="pr-name">موهيتو خوخ</div>
+            <div class="pr-desc">موهيتو الخوخ المنعش</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/mojito_pomegranate.png"
+             data-name="موهيتو رمان"
+             data-desc="موهيتو الرمان المنعش"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍃</div>
+          <div class="pr-info">
+            <div class="pr-name">موهيتو رمان</div>
+            <div class="pr-desc">موهيتو الرمان المنعش</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/mojito_blue.png"
+             data-name="موهيتو بلو"
+             data-desc="موهيتو بلو المميز"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍃</div>
+          <div class="pr-info">
+            <div class="pr-name">موهيتو بلو</div>
+            <div class="pr-desc">موهيتو بلو المميز</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/mojito_watermelon.png"
+             data-name="موهيتو ركي"
+             data-desc="موهيتو ركي المنعش"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍃</div>
+          <div class="pr-info">
+            <div class="pr-name">موهيتو ركي</div>
+            <div class="pr-desc">موهيتو ركي المنعش</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/mojito_hala.png"
+             data-name="موهيتو هلا"
+             data-desc="موهيتو هلا الخاص"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">🍃</div>
+          <div class="pr-info">
+            <div class="pr-name">موهيتو هلا</div>
+            <div class="pr-desc">موهيتو هلا الخاص</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- ENERGY -->
+      <div class="cat-group" data-cat="energy">
+        <div class="cat-group-title">⚡ مشروبات الطاقة</div>
+
+        <div class="product-row"
+             data-img="assets/energy_tiger.png"
+             data-name="مكسيكي تايجر"
+             data-desc="مكسيكي بالتايجر المنشّط"
+             data-price="3,000 د.ع">
+          <div class="pr-icon">⚡</div>
+          <div class="pr-info">
+            <div class="pr-name">مكسيكي تايجر</div>
+            <div class="pr-desc">مكسيكي بالتايجر المنشّط</div>
+          </div>
+          <div class="pr-price">3,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/energy_redbull.png"
+             data-name="مكسيكي ريدبول"
+             data-desc="مكسيكي بالريدبول المنشّط"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">⚡</div>
+          <div class="pr-info">
+            <div class="pr-name">مكسيكي ريدبول</div>
+            <div class="pr-desc">مكسيكي بالريدبول المنشّط</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/energy_strawberry.png"
+             data-name="مشروب طاقة فراولة"
+             data-desc="مشروب طاقة بنكهة الفراولة"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">⚡</div>
+          <div class="pr-info">
+            <div class="pr-name">مشروب طاقة فراولة</div>
+            <div class="pr-desc">مشروب طاقة بنكهة الفراولة</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/energy_pomegranate.png"
+             data-name="مشروب طاقة رمان"
+             data-desc="مشروب طاقة بنكهة الرمان"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">⚡</div>
+          <div class="pr-info">
+            <div class="pr-name">مشروب طاقة رمان</div>
+            <div class="pr-desc">مشروب طاقة بنكهة الرمان</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/energy_berry.png"
+             data-name="مشروب طاقة توت"
+             data-desc="مشروب طاقة بنكهة التوت"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">⚡</div>
+          <div class="pr-info">
+            <div class="pr-name">مشروب طاقة توت</div>
+            <div class="pr-desc">مشروب طاقة بنكهة التوت</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/energy_blue.png"
+             data-name="مشروب طاقة بلو"
+             data-desc="مشروب طاقة بنكهة البلو"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">⚡</div>
+          <div class="pr-info">
+            <div class="pr-name">مشروب طاقة بلو</div>
+            <div class="pr-desc">مشروب طاقة بنكهة البلو</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- ICEDCOFFEE -->
+      <div class="cat-group" data-cat="icedcoffee">
+        <div class="cat-group-title">❄️ القهوة المثلجة</div>
+
+        <div class="product-row"
+             data-img="assets/coffee_iced_latte.png"
+             data-name="ايس لاتيه"
+             data-desc="لاتيه مثلج كلاسيك"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">ايس لاتيه</div>
+            <div class="pr-desc">لاتيه مثلج كلاسيك</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/coffee_iced_caramel.png"
+             data-name="ايس لاتيه كراميل"
+             data-desc="لاتيه مثلج بصوص الكراميل"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">ايس لاتيه كراميل</div>
+            <div class="pr-desc">لاتيه مثلج بصوص الكراميل</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/coffee_iced_hazelnut.png"
+             data-name="ايس لاتيه بندق"
+             data-desc="لاتيه مثلج بشراب البندق"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">ايس لاتيه بندق</div>
+            <div class="pr-desc">لاتيه مثلج بشراب البندق</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/iced_pistachio.png"
+             data-name="ايس لاتيه بستاشيو"
+             data-desc="لاتيه مثلج بكريمة الفستق"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">ايس لاتيه بستاشيو</div>
+            <div class="pr-desc">لاتيه مثلج بكريمة الفستق</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/coffee_iced_vanilla.png"
+             data-name="ايس لاتيه فانيلا"
+             data-desc="لاتيه مثلج بشراب الفانيلا"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">ايس لاتيه فانيلا</div>
+            <div class="pr-desc">لاتيه مثلج بشراب الفانيلا</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/coffee_iced_spanish.png"
+             data-name="ايس لاتيه سبانش"
+             data-desc="لاتيه مثلج بالطريقة الإسبانية"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">ايس لاتيه سبانش</div>
+            <div class="pr-desc">لاتيه مثلج بالطريقة الإسبانية</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/coffee_iced_mocha.png"
+             data-name="ايس لاتيه موكا"
+             data-desc="لاتيه مثلج بالموكا الشوكولا"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">ايس لاتيه موكا</div>
+            <div class="pr-desc">لاتيه مثلج بالموكا الشوكولا</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- FRAPPE -->
+      <div class="cat-group" data-cat="frappe">
+        <div class="cat-group-title">☕ الفرابيه</div>
+
+        <div class="product-row"
+             data-img="assets/frappe_chocolate.png"
+             data-name="فرابيه شوكولا"
+             data-desc="فرابيه الشوكولا الغني"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">فرابيه شوكولا</div>
+            <div class="pr-desc">فرابيه الشوكولا الغني</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/frappe_pistachio.png"
+             data-name="فرابيه بستاشيو"
+             data-desc="فرابيه الفستق الحلبي"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">فرابيه بستاشيو</div>
+            <div class="pr-desc">فرابيه الفستق الحلبي</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/frappe_caramel.png"
+             data-name="فرابيه كراميل"
+             data-desc="فرابيه الكراميل اللذيذ"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">فرابيه كراميل</div>
+            <div class="pr-desc">فرابيه الكراميل اللذيذ</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/frappe_vanilla.png"
+             data-name="فرابيه فانيلا"
+             data-desc="فرابيه الفانيلا الناعمة"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">فرابيه فانيلا</div>
+            <div class="pr-desc">فرابيه الفانيلا الناعمة</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/frappe_strawberry.png"
+             data-name="فرابيه فراولة"
+             data-desc="فرابيه الفراولة الحلو"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">فرابيه فراولة</div>
+            <div class="pr-desc">فرابيه الفراولة الحلو</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/frappe_coffee.png"
+             data-name="كوفي فرابيه"
+             data-desc="فرابيه القهوة المنعش"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">كوفي فرابيه</div>
+            <div class="pr-desc">فرابيه القهوة المنعش</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/frappuccino.png"
+             data-name="فرابتشينو"
+             data-desc="فرابتشينو كريمي مميز"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">فرابتشينو</div>
+            <div class="pr-desc">فرابتشينو كريمي مميز</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- ICECREAM -->
+      <div class="cat-group" data-cat="icecream">
+        <div class="cat-group-title">🍨 الآيس كريم والفواكه والمكسرات</div>
+
+        <div class="product-row"
+             data-img="assets/icecream_italian_ai.webp?v=1781880224"
+             data-name="ايس كريم ايطالي"
+             data-desc="ايس كريم ايطالي كريمي طازج (3 كرات)"
+             data-price="3,000 د.ع">
+          <div class="pr-icon">🍨</div>
+          <div class="pr-info">
+            <div class="pr-name">ايس كريم ايطالي <span class="pr-subname">(3 كرات)</span></div>
+            <div class="pr-desc">ايس كريم ايطالي كريمي طازج (3 كرات)</div>
+          </div>
+          <div class="pr-price">3,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/icecream_banana_split_ai.webp?v=1781880224"
+             data-name="ايس كريم بنانا سبلت"
+             data-desc="ايس كريم بنانا سبلت بالموز والشوكولاتة"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">🍨</div>
+          <div class="pr-info">
+            <div class="pr-name">ايس كريم بنانا سبلت <span class="pr-subname">(موز + ايس كريم + كريمة مع الشوكولا)</span></div>
+            <div class="pr-desc">ايس كريم بنانا سبلت بالموز والشوكولاتة</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/icecream_napoleon_ai.webp?v=1781880224"
+             data-name="طبق نابليون"
+             data-desc="طبق نابليون بالكريمة والشوكولا"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">🍨</div>
+          <div class="pr-info">
+            <div class="pr-name">طبق نابليون</div>
+            <div class="pr-desc">طبق نابليون بالكريمة والشوكولا</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/icecream_chocola_mou_ai.webp?v=1781880224"
+             data-name="شوكولا مو"
+             data-desc="شوكولا مو بالكريمة اللذيذة"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">🍨</div>
+          <div class="pr-info">
+            <div class="pr-name">شوكولا مو</div>
+            <div class="pr-desc">شوكولا مو بالكريمة اللذيذة</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/icecream_fruit_bowl_ai.webp?v=1781883236"
+             data-name="طبق فواكه مشكل"
+             data-desc="طبق فواكه مشكلة طازجة"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">🍓</div>
+          <div class="pr-info">
+            <div class="pr-name">طبق فواكه مشكل</div>
+            <div class="pr-desc">طبق فواكه مشكلة طازجة</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/icecream_fruit_salad_ai.webp?v=1781883236"
+             data-name="سلطة فواكه"
+             data-desc="سلطة فواكه منوعة مقطعة بالعصير"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">🍓</div>
+          <div class="pr-info">
+            <div class="pr-name">سلطة فواكه</div>
+            <div class="pr-desc">سلطة فواكه منوعة مقطعة بالعصير</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/icecream_nuts_plate_ai.webp?v=1781883236"
+             data-name="طبق مكسرات"
+             data-desc="طبق مكسرات مشكلة فاخرة"
+             data-price="7,000 د.ع">
+          <div class="pr-icon">🥜</div>
+          <div class="pr-info">
+            <div class="pr-name">طبق مكسرات</div>
+            <div class="pr-desc">طبق مكسرات مشكلة فاخرة</div>
+          </div>
+          <div class="pr-price">7,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- HOT2 -->
+      <div class="cat-group" data-cat="hot2">
+        <div class="cat-group-title">☕ المشروبات الساخنة</div>
+
+        <div class="product-row"
+             data-img="assets/hot_tea.png"
+             data-name="شاي"
+             data-desc="شاي أحمر ساخن"
+             data-price="1,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">شاي</div>
+            <div class="pr-desc">شاي أحمر ساخن</div>
+          </div>
+          <div class="pr-price">1,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hot_turkish.png"
+             data-name="قهوة تركية"
+             data-desc="قهوة تركية أصيلة"
+             data-price="2,500 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">قهوة تركية</div>
+            <div class="pr-desc">قهوة تركية أصيلة</div>
+          </div>
+          <div class="pr-price">2,500 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hot_jakleetia.png"
+             data-name="قهوة جكليتية"
+             data-desc="قهوة جكليتية ساخنة لذيذة"
+             data-price="2,500 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">قهوة جكليتية</div>
+            <div class="pr-desc">قهوة جكليتية ساخنة لذيذة</div>
+          </div>
+          <div class="pr-price">2,500 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hot_espresso_single.png"
+             data-name="اسبريسو سنكل"
+             data-desc="اسبريسو سنجل مركّز"
+             data-price="3,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">اسبريسو سنكل</div>
+            <div class="pr-desc">اسبريسو سنجل مركّز</div>
+          </div>
+          <div class="pr-price">3,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hot_espresso_double.png"
+             data-name="اسبريسو دبل"
+             data-desc="اسبريسو دبل قوي مضاعف"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">اسبريسو دبل</div>
+            <div class="pr-desc">اسبريسو دبل قوي مضاعف</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hot_affogato.png"
+             data-name="افوكادو"
+             data-desc="اسبريسو ساخن يُسكب فوق كرة آيس كريم فانيلا"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">افوكادو</div>
+            <div class="pr-desc">اسبريسو ساخن يُسكب فوق كرة آيس كريم فانيلا</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hot_nescafe.png"
+             data-name="نسكافيه"
+             data-desc="نسكافيه ساخن كلاسيك مع الرغوة"
+             data-price="3,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">نسكافيه</div>
+            <div class="pr-desc">نسكافيه ساخن كلاسيك مع الرغوة</div>
+          </div>
+          <div class="pr-price">3,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hot_cappuccino.png"
+             data-name="كابتشينو"
+             data-desc="كابتشينو ساخن بالرغوة"
+             data-price="3,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">كابتشينو</div>
+            <div class="pr-desc">كابتشينو ساخن بالرغوة</div>
+          </div>
+          <div class="pr-price">3,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hot_chocolate.png"
+             data-name="هوت شوكليت"
+             data-desc="شوكولا ساخنة كريمية"
+             data-price="3,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">هوت شوكليت</div>
+            <div class="pr-desc">شوكولا ساخنة كريمية</div>
+          </div>
+          <div class="pr-price">3,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hot_latte.png"
+             data-name="كوفي لاتيه"
+             data-desc="لاتيه ساخن بالحليب الكريمي (فانيلا - كراميل - سبانش - بندق - موكا)"
+             data-price="3,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">كوفي لاتيه <span class="pr-subname">(فانيلا - كراميل - سبانش - بندق - موكا)</span></div>
+            <div class="pr-desc">لاتيه ساخن بالحليب الكريمي (فانيلا - كراميل - سبانش - بندق - موكا)</div>
+          </div>
+          <div class="pr-price">3,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hot_americano.png"
+             data-name="امريكان كوفي"
+             data-desc="أمريكانو ساخن مميز"
+             data-price="4,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">امريكان كوفي</div>
+            <div class="pr-desc">أمريكانو ساخن مميز</div>
+          </div>
+          <div class="pr-price">4,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hot_mochaccino.png"
+             data-name="موكاتشينو"
+             data-desc="موكاتشينو ساخن بالشوكولا"
+             data-price="5,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">موكاتشينو</div>
+            <div class="pr-desc">موكاتشينو ساخن بالشوكولا</div>
+          </div>
+          <div class="pr-price">5,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hot_milk.webp?v=1781890501"
+             data-name="هوت ميلك"
+             data-desc="حليب ساخن كريمي"
+             data-price="2,000 د.ع">
+          <div class="pr-icon">☕</div>
+          <div class="pr-info">
+            <div class="pr-name">هوت ميلك</div>
+            <div class="pr-desc">حليب ساخن كريمي</div>
+          </div>
+          <div class="pr-price">2,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- HOOKAH -->
+      <div class="cat-group" data-cat="hookah">
+        <div class="cat-group-title">💨 الاراكيل</div>
+
+        <div class="product-row"
+             data-img="assets/hookah_english.webp?v=1781882430" data-name="انكليزي"
+             data-desc="ارجيلة انكليزي بنكهة مميزة"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">💨</div>
+          <div class="pr-info">
+            <div class="pr-name">انكليزي</div>
+            <div class="pr-desc">ارجيلة انكليزي بنكهة مميزة</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hookah_gum_mint.webp?v=1781882430" data-name="علج ونعناع"
+             data-desc="معسّل العلج مع النعناع"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">💨</div>
+          <div class="pr-info">
+            <div class="pr-name">علج ونعناع</div>
+            <div class="pr-desc">معسّل العلج مع النعناع</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hookah_mint.webp?v=1781882430" data-name="نعناع"
+             data-desc="ارجيلة النعناع الكلاسيك"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">💨</div>
+          <div class="pr-info">
+            <div class="pr-name">نعناع</div>
+            <div class="pr-desc">ارجيلة النعناع الكلاسيك</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hookah_lemon_mint.webp?v=1781882430"
+             data-name="ليمون ونعناع"
+             data-desc="ارجيلة الليمون مع النعناع"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">💨</div>
+          <div class="pr-info">
+            <div class="pr-name">ليمون ونعناع</div>
+            <div class="pr-desc">ارجيلة الليمون مع النعناع</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hookah_double_apple_v2.webp?v=1781883746"
+             data-name="تفاحتين"
+             data-desc="ارجيلة تفاحتين مزدوجة"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">💨</div>
+          <div class="pr-info">
+            <div class="pr-name">تفاحتين</div>
+            <div class="pr-desc">ارجيلة تفاحتين مزدوجة</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hookah_apple.webp?v=1781882430"
+             data-name="تفاحة"
+             data-desc="ارجيلة التفاحة الكلاسيك"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">💨</div>
+          <div class="pr-info">
+            <div class="pr-name">تفاحة</div>
+            <div class="pr-desc">ارجيلة التفاحة الكلاسيك</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hookah_gum_melon.webp?v=1781882432"
+             data-name="علج وشمام"
+             data-desc="معسّل العلج مع الشمام"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">💨</div>
+          <div class="pr-info">
+            <div class="pr-name">علج وشمام</div>
+            <div class="pr-desc">معسّل العلج مع الشمام</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hookah_grape.webp?v=1781882432"
+             data-name="عنب"
+             data-desc="ارجيلة العنب المميزة"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">💨</div>
+          <div class="pr-info">
+            <div class="pr-name">عنب</div>
+            <div class="pr-desc">ارجيلة العنب المميزة</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hookah_mexican.webp?v=1781882432"
+             data-name="مكسيكي"
+             data-desc="ارجيلة مكسيكية حارة ومنعشة"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">💨</div>
+          <div class="pr-info">
+            <div class="pr-name">مكسيكي</div>
+            <div class="pr-desc">ارجيلة مكسيكية حارة ومنعشة</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hookah_bounty_v2.webp?v=1781883746"
+             data-name="باونتي"
+             data-desc="ارجيلة الباونتي بجوز الهند"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">💨</div>
+          <div class="pr-info">
+            <div class="pr-name">باونتي</div>
+            <div class="pr-desc">ارجيلة الباونتي بجوز الهند</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hookah_gelatin.webp?v=1781882607"
+             data-name="جلاتين"
+             data-desc="ارجيلة الجلاتين الحلوة"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">💨</div>
+          <div class="pr-info">
+            <div class="pr-name">جلاتين</div>
+            <div class="pr-desc">ارجيلة الجلاتين الحلوة</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+        <div class="product-row"
+             data-img="assets/hookah_hala.webp?v=1781882432"
+             data-name="هلا"
+             data-desc="ارجيلة هلا بنكهة خاصة"
+             data-price="8,000 د.ع">
+          <div class="pr-icon">💨</div>
+          <div class="pr-info">
+            <div class="pr-name">هلا</div>
+            <div class="pr-desc">ارجيلة هلا بنكهة خاصة</div>
+          </div>
+          <div class="pr-price">8,000 د.ع</div>
+        </div>
+      </div>
+
+      <!-- SAN SEBASTIAN -->
+      <div class="cat-group" data-cat="sansebastian">
+        <div class="cat-group-title">🍮 سان سباستيان</div>
+
+        <div class="product-row"
+             data-img="assets/san_sebastian.png"
+             data-name="سان سباستيان"
+             data-desc="كيكة جبنة إسبانية بقلب كريمي ناعم"
+             data-price="6,000 د.ع">
+          <div class="pr-icon">🍮</div>
+          <div class="pr-info">
+            <div class="pr-name">سان سباستيان</div>
+            <div class="pr-desc">كيكة جبنة إسبانية بقلب كريمي ناعم</div>
+          </div>
+          <div class="pr-price">6,000 د.ع</div>
+        </div>
+      </div>
+
+    </div><!-- /product-list -->
+  </div><!-- /right-panel -->
+</div><!-- /app -->
+
+<!-- Cart FAB -->
+<div id="cart-fab" onclick="openCart()" aria-label="سلة الطلبات">
+  <svg viewBox="0 0 24 24"><path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1zM10 6a2 2 0 0 1 4 0v1h-4V6zm8 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9h2v1a1 1 0 0 0 2 0V9h4v1a1 1 0 0 0 2 0V9h2v10z"/></svg>
+  <div id="cart-fab-count">0</div>
+</div>
+
+<!-- Cart Drawer -->
+<div id="cart-drawer">
+  <div id="cart-backdrop" onclick="closeCart()"></div>
+  <div id="cart-sheet">
+    <div id="cart-handle"></div>
+    <div id="cart-hdr">
+      <div id="cart-title">🛒 طلبي</div>
+      <button id="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div id="cart-items-wrap">
+      <div id="cart-empty-msg">لا يوجد أصناف في الطلب بعد</div>
+    </div>
+    <div id="cart-total-row">
+      <div id="cart-total-lbl">المجموع</div>
+      <div id="cart-total-amt">0 د.ع</div>
+    </div>
+    <div id="location-wrap">
+      <label for="location-input">📍 موقعك للتوصيل</label>
+      <textarea id="location-input" rows="2" placeholder="اكتب عنوانك بالتفصيل..."></textarea>
+    </div>
+    <button id="send-wa-btn" onclick="sendWhatsApp()">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      أرسل الطلب عبر واتساب
+    </button>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   BLOB SPLASH ANIMATION
+══════════════════════════════════════════════════════════ */
+(function() {
+  const canvas = document.getElementById('blob-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, cx, cy;
+  let t = 0;
+  let phase = 'expand'; // expand → hold → contract
+  let expandDone = false;
+  let contractDone = false;
+  let radius = 0;
+  const MAX_RADIUS_FACTOR = 1.5;
+  const EXPAND_SPEED = 0.04;
+  const CONTRACT_SPEED = 0.05;
+  let holdTimer = null;
+  const COLOR = '#FAF8F3';
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    cx = W / 2; cy = H / 2;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function blobRadius(angle, base) {
+    const noiseAmp = base * 0.12;
+    return base +
+      Math.sin(angle * 3 + t * 1.2) * noiseAmp * 0.6 +
+      Math.sin(angle * 5 - t * 0.9) * noiseAmp * 0.4 +
+      Math.cos(angle * 2 + t * 1.5) * noiseAmp * 0.5;
+  }
+
+  function drawBlob(base) {
+    const STEPS = 80;
+    ctx.clearRect(0, 0, W, H);
+    ctx.beginPath();
+    for (let i = 0; i <= STEPS; i++) {
+      const angle = (i / STEPS) * Math.PI * 2;
+      const r = blobRadius(angle, base);
+      const x = cx + Math.cos(angle) * r;
+      const y = cy + Math.sin(angle) * r;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = COLOR;
+    ctx.fill();
+  }
+
+  const maxR = Math.sqrt(cx * cx + cy * cy) * MAX_RADIUS_FACTOR;
+
+  function tick() {
+    t += 0.03;
+
+    if (phase === 'expand') {
+      radius += (maxR - radius) * EXPAND_SPEED;
+      if (!expandDone && radius > maxR * 0.98) {
+        expandDone = true;
+        // Fill whole screen
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = COLOR;
+        ctx.fillRect(0, 0, W, H);
+        phase = 'hold';
+        holdTimer = setTimeout(() => { phase = 'contract'; }, 900);
+      }
+      drawBlob(radius);
+    } else if (phase === 'hold') {
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = COLOR;
+      ctx.fillRect(0, 0, W, H);
+    } else if (phase === 'contract') {
+      radius -= radius * CONTRACT_SPEED;
+      drawBlob(Math.max(radius, 0));
+      if (radius < 2) {
+        contractDone = true;
+        ctx.clearRect(0, 0, W, H);
+        cancelAnimationFrame(raf);
+        // Hide splash
+        const splash = document.getElementById('splash');
+        splash.classList.add('exit');
+        splash.addEventListener('animationend', () => {
+          splash.style.display = 'none';
+        }, { once: true });
+        return;
+      }
+    }
+    raf = requestAnimationFrame(tick);
+  }
+  let raf = requestAnimationFrame(tick);
+})();
+
+/* ══════════════════════════════════════════════════════════
+   PRODUCT INTERACTION
+══════════════════════════════════════════════════════════ */
+const heroImg      = document.getElementById('hero-img');
+const heroName     = document.getElementById('hero-product-name');
+const heroDesc     = document.getElementById('hero-product-desc');
+const heroPrice    = document.getElementById('hero-product-price');
+const catBtns      = document.querySelectorAll('.cat-btn');
+const catGroups    = document.querySelectorAll('.cat-group');
+const rightTitle   = document.getElementById('right-title');
+const rightCount   = document.getElementById('right-count');
+const rows         = document.querySelectorAll('.product-row');
+
+const catNames = { crepe: 'كريب', waffle: 'وافل', pancake: 'بان كيك', cheesecake: 'تشيز كيك', brownies: 'براونيز', juices2: 'العصائر', cocktail: 'كوكتيل', smoothie: 'سموذي', milkshake: 'ميلك شيك', mojito: 'موهيتو', energy: 'مشروبات الطاقة', icedcoffee: 'القهوة المثلجة', frappe: 'الفرابيه', icecream: 'ايس كريم والفواكه والمكسرات', hot2: 'المشروبات الساخنة', hookah: 'الاراكيل', sansebastian: 'سان سباستيان' };
+const catCounts = { crepe: '16 صنف', waffle: '12 صنف', pancake: '9 أصناف', cheesecake: '7 أصناف', brownies: '4 أصناف', juices2: '9 أصناف', cocktail: '13 صنف', smoothie: '8 أصناف', milkshake: '12 صنف', mojito: '10 أصناف', energy: '6 أصناف', icedcoffee: '7 أصناف', frappe: '7 أصناف', icecream: '7 أصناف', hot2: '13 صنف', hookah: '12 صنف', sansebastian: '1 صنف' };
+
+const heroCaption = document.getElementById('hero-caption');
+function updateHero(img, name, desc, price) {
+  heroImg.classList.add('fade-out');
+  heroCaption.classList.add('fade-out');
+  setTimeout(() => {
+    heroImg.src = img.split('?')[0] + '?v=' + Date.now();
+    heroName.textContent = name;
+    heroDesc.textContent = desc;
+    heroPrice.textContent = price;
+    heroImg.classList.remove('fade-out');
+    heroCaption.classList.remove('fade-out');
+  }, 380);
+}
+
+rows.forEach(row => {
+  row.addEventListener('click', (e) => {
+    if (e.target.closest('.pr-add')) return;
+    rows.forEach(r => r.classList.remove('active'));
+    row.classList.add('active');
+    updateHero(row.dataset.img, row.dataset.name, row.dataset.desc, row.dataset.price);
+  });
+});
+
+// Show only the selected category group (tab-panel mode)
+function showCat(cat) {
+  catGroups.forEach(g => g.classList.remove('show'));
+  catBtns.forEach(b => b.classList.remove('active'));
+
+  const group = document.querySelector(`.cat-group[data-cat="${cat}"]`);
+  if (group) {
+    group.classList.add('show');
+    document.getElementById('product-list').scrollTop = 0;
+    const firstRow = group.querySelector('.product-row');
+    if (firstRow) {
+      firstRow.classList.add('active');
+      updateHero(firstRow.dataset.img, firstRow.dataset.name, firstRow.dataset.desc, firstRow.dataset.price);
+    }
+  }
+  // Activate matching button in ALL navs (sidebar + mobile)
+  document.querySelectorAll(`.cat-btn[data-cat="${cat}"]`).forEach(b => b.classList.add('active'));
+  rightTitle.textContent = catNames[cat] || '';
+  rightCount.textContent = catCounts[cat] || '';
+}
+
+catBtns.forEach(btn => {
+  btn.addEventListener('click', () => showCat(btn.dataset.cat));
+});
+
+/* ── Mobile bottom sheet logic ── */
+const mobileSheet     = document.getElementById('mobile-item-sheet');
+const sheetImg        = document.getElementById('mobile-sheet-img');
+const sheetName       = document.getElementById('mobile-sheet-name');
+const sheetDesc       = document.getElementById('mobile-sheet-desc');
+const sheetPrice      = document.getElementById('mobile-sheet-price');
+const sheetAdd        = document.getElementById('mobile-sheet-add');
+const sheetClose      = document.getElementById('mobile-sheet-close');
+const sheetBackdrop   = document.getElementById('mobile-sheet-backdrop');
+
+let sheetCurrentName  = '';
+let sheetCurrentPrice = '';
+
+function openMobileSheet(img, name, desc, price) {
+  sheetImg.src        = img.split('?')[0] + '?v=' + Date.now();
+  sheetName.textContent  = name;
+  sheetDesc.textContent  = desc;
+  sheetPrice.textContent = price;
+  sheetCurrentName  = name;
+  sheetCurrentPrice = price;
+  mobileSheet.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileSheet() {
+  mobileSheet.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+if (sheetClose)    sheetClose.addEventListener('click', closeMobileSheet);
+if (sheetBackdrop) sheetBackdrop.addEventListener('click', closeMobileSheet);
+if (sheetAdd) {
+  sheetAdd.addEventListener('click', () => {
+    addToCart(sheetCurrentName, sheetCurrentPrice);
+    sheetAdd.textContent = '✓ أُضيف';
+    sheetAdd.style.background = 'var(--olive)';
+    sheetAdd.style.color = '#fff';
+    setTimeout(() => {
+      sheetAdd.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1zM10 6a2 2 0 0 1 4 0v1h-4V6zm8 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9h2v1a1 1 0 0 0 2 0V9h4v1a1 1 0 0 0 2 0V9h2v10z"/></svg> أضف للطلب';
+      sheetAdd.style.background = '';
+      sheetAdd.style.color = '';
+    }, 1200);
+  });
+}
+
+const isMobile = () => window.innerWidth <= 768;
+
+// Load thumbnail images on pr-icon
+rows.forEach(row => {
+  const img = row.dataset.img;
+  const icon = row.querySelector('.pr-icon');
+  if (img && icon) {
+    const src = img.split('?')[0];
+    icon.style.backgroundImage = `url('${src}')`;
+    icon.style.backgroundSize = 'cover';
+    icon.style.backgroundPosition = 'center';
+    icon.classList.add('has-img');
+  }
+});
+
+// Open on كريب by default
+showCat('crepe');
+
+/* ══════════════════════════════════════════════════════════
+   CART SYSTEM
+══════════════════════════════════════════════════════════ */
+const WA_NUMBER = '9647869991944';
+let cart = []; // [{name, price, qty}]
+
+// Inject + button on every product row
+rows.forEach(row => {
+  const btn = document.createElement('button');
+  btn.className = 'pr-add';
+  btn.textContent = '+';
+  btn.title = 'أضف للطلب';
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    addToCart(row.dataset.name, row.dataset.price);
+    btn.classList.add('added');
+    btn.textContent = '✓';
+    setTimeout(() => { btn.textContent = '+'; btn.classList.remove('added'); }, 1000);
+  });
+  row.appendChild(btn);
+});
+
+// Track currently selected product for left-panel button
+let currentProduct = { name: '', price: '' };
+const origUpdateHero = updateHero;
+rows.forEach(row => {
+  row.addEventListener('click', () => {
+    currentProduct = { name: row.dataset.name, price: row.dataset.price };
+  });
+});
+// init with first row
+const firstRow = document.querySelector('.product-row');
+if (firstRow) currentProduct = { name: firstRow.dataset.name, price: firstRow.dataset.price };
+
+function addCurrentToCart() {
+  if (!currentProduct.name) return;
+  addToCart(currentProduct.name, currentProduct.price);
+  const btn = document.getElementById('add-to-cart-btn');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '✓ أُضيف!';
+  setTimeout(() => { btn.innerHTML = orig; }, 900);
+}
+
+function parsePrice(str) {
+  return parseInt(str.replace(/[^0-9]/g, ''), 10) || 0;
+}
+function formatPrice(n) {
+  return n.toLocaleString('ar-IQ') + ' د.ع';
+}
+
+function addToCart(name, priceStr) {
+  const price = parsePrice(priceStr);
+  const existing = cart.find(i => i.name === name);
+  if (existing) { existing.qty++; }
+  else { cart.push({ name, price, qty: 1 }); }
+  updateCartFab();
+}
+
+function updateCartFab() {
+  const fab = document.getElementById('cart-fab');
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('cart-fab-count').textContent = count;
+  fab.style.display = count > 0 ? 'flex' : 'none';
+}
+
+function openCart() {
+  renderCart();
+  document.getElementById('cart-drawer').classList.add('open');
+}
+function closeCart() {
+  document.getElementById('cart-drawer').classList.remove('open');
+}
+
+function renderCart() {
+  const wrap = document.getElementById('cart-items-wrap');
+  const emptyMsg = document.getElementById('cart-empty-msg');
+  const totalAmt = document.getElementById('cart-total-amt');
+
+  // Remove only dynamic rows — keep emptyMsg in the DOM
+  wrap.querySelectorAll('.cart-row').forEach(r => r.remove());
+
+  if (cart.length === 0) {
+    emptyMsg.style.display = 'block';
+    totalAmt.textContent = '0 د.ع';
+    return;
+  }
+
+  emptyMsg.style.display = 'none';
+
+  let total = 0;
+  cart.forEach((item, idx) => {
+    total += item.price * item.qty;
+    const row = document.createElement('div');
+    row.className = 'cart-row';
+    row.innerHTML = `
+      <button class="cart-row-del" onclick="removeItem(${idx})" title="حذف">✕</button>
+      <div class="cart-row-name">${item.name}</div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="changeQty(${idx},-1)">−</button>
+        <div class="qty-num">${item.qty}</div>
+        <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
+      </div>
+      <div class="cart-row-price">${formatPrice(item.price * item.qty)}</div>
+    `;
+    wrap.appendChild(row);
+  });
+
+  totalAmt.textContent = formatPrice(total);
+}
+
+function removeItem(idx) {
+  cart.splice(idx, 1);
+  updateCartFab();
+  renderCart();
+}
+
+function changeQty(idx, delta) {
+  cart[idx].qty += delta;
+  if (cart[idx].qty <= 0) cart.splice(idx, 1);
+  updateCartFab();
+  renderCart();
+}
+
+function sendWhatsApp() {
+  if (cart.length === 0) return;
+  const location = document.getElementById('location-input').value.trim();
+  if (!location) {
+    document.getElementById('location-input').style.borderColor = '#dc2626';
+    document.getElementById('location-input').focus();
+    document.getElementById('location-input').placeholder = 'يرجى كتابة موقعك أولاً';
+    return;
+  }
+  document.getElementById('location-input').style.borderColor = '';
+  let msg = '🌟 *طلب جديد — هلا كافيه*\n\n';
+  msg += `📍 *موقع التوصيل:* ${location}\n\n`;
+  msg += '*الطلب:*\n';
+  cart.forEach(item => {
+    msg += `• ${item.name} × ${item.qty}  —  ${formatPrice(item.price * item.qty)}\n`;
+  });
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  msg += `\n💰 *المجموع: ${formatPrice(total)}*`;
+  const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+</script>
+
+<!-- DELIVERY LOCATION MODAL -->
+<div id="table-modal">
+  <div id="table-box">
+    <h3>📍 موقعك للتوصيل</h3>
+    <p>اكتب موقعك بالتفصيل حتى يوصلك المندوب</p>
+    <input id="table-input" type="text" placeholder="مثال: حي الجامعة، شارع 14، بناية A" inputmode="text" />
+    <button id="table-confirm-btn" onclick="confirmOrder()">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 0C5.372 0 0 5.373 0 12c0 2.117.554 4.103 1.523 5.83L0 24l6.302-1.498A11.953 11.953 0 0 0 12 24c6.627 0 12-5.373 12-12S18.626 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.001-1.37l-.36-.214-3.733.888.936-3.63-.235-.374A9.818 9.818 0 1 1 12 21.818z"/></svg>
+      أرسل الطلب عبر واتساب
+    </button>
+    <button id="table-cancel-btn" onclick="closeTableModal()">إلغاء</button>
+  </div>
+</div>
+
+</body>
+</html>
