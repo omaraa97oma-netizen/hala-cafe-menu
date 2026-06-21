@@ -118,12 +118,12 @@ body {
 #hero-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover;
-  transition: opacity .12s ease, transform .12s ease;
-  will-change: opacity, transform;
+  transition: opacity .08s ease;
+  will-change: opacity;
 }
-#hero-img.fade-out { opacity: 0; transform: scale(1.03); }
-#hero-caption { transition: opacity .12s ease, transform .12s ease; will-change: opacity, transform; }
-#hero-caption.fade-out { opacity: 0; transform: translateY(6px); }
+#hero-img.fade-out { opacity: 0; }
+#hero-caption { transition: opacity .1s ease, transform .1s ease; will-change: opacity, transform; }
+#hero-caption.fade-out { opacity: 0; transform: translateY(4px); }
 #left-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(
@@ -2990,13 +2990,14 @@ function updateHero(img, name, desc, price) {
   if (_heroTimer) { clearTimeout(_heroTimer); _heroTimer = null; }
   if (_heroPending) { _heroPending.onload = _heroPending.onerror = null; _heroPending = null; }
 
-  // We keep the old text during fade-out to prevent text switching before the image does
+  // Text + caption update instantly
+  heroName.textContent = name;
+  heroDesc.textContent = desc;
+  heroPrice.textContent = price;
+  heroCaption.classList.remove('fade-out');
+
   if (heroImg.getAttribute('src') === cleanSrc) {
-    heroName.textContent = name;
-    heroDesc.textContent = desc;
-    heroPrice.textContent = price;
     heroImg.classList.remove('fade-out');
-    heroCaption.classList.remove('fade-out');
     return;
   }
 
@@ -3005,41 +3006,21 @@ function updateHero(img, name, desc, price) {
 
   if (tmp.complete) {
     heroImg.src = cleanSrc;
-    heroName.textContent = name;
-    heroDesc.textContent = desc;
-    heroPrice.textContent = price;
     heroImg.classList.remove('fade-out');
-    heroCaption.classList.remove('fade-out');
     return;
   }
 
-  // Fade out immediately — gives instant visual feedback
-  heroImg.classList.add('fade-out');
-  heroCaption.classList.add('fade-out');
-
-  let timerDone = false;
-  let imgLoaded = false;
-  const swap = () => {
-    heroImg.src = cleanSrc;
-    heroName.textContent = name;
-    heroDesc.textContent = desc;
-    heroPrice.textContent = price;
-    heroImg.classList.remove('fade-out');
-    heroCaption.classList.remove('fade-out');
-  };
-
-  _heroTimer = setTimeout(() => {
-    _heroTimer = null;
-    timerDone = true;
-    if (imgLoaded) swap();
-  }, 120);
-
+  // Keep old image visible while new one loads — no black/blank state
   _heroPending = tmp;
   tmp.onload = tmp.onerror = () => {
     if (!_heroPending) return;
     _heroPending = null;
-    imgLoaded = true;
-    if (timerDone) swap();
+    heroImg.classList.add('fade-out');
+    _heroTimer = setTimeout(() => {
+      _heroTimer = null;
+      heroImg.src = cleanSrc;
+      heroImg.classList.remove('fade-out');
+    }, 80);
   };
 }
 
@@ -3257,7 +3238,7 @@ setTimeout(() => {
   };
   if (typeof requestIdleCallback !== 'undefined') requestIdleCallback(step, { timeout: 500 });
   else step();
-}, 2000);
+}, 500);
 
 /* ══════════════════════════════════════════════════════════
    CART SYSTEM
