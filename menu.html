@@ -118,7 +118,7 @@ body {
 #hero-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover;
-  transition: opacity .08s ease;
+  transition: opacity .06s ease;
   will-change: opacity;
 }
 #hero-img.fade-out { opacity: 0; }
@@ -2987,18 +2987,15 @@ function updateHero(img, name, desc, price) {
     return;
   }
 
-  // Not cached yet — keep OLD image visible while new one loads in background.
-  // Only fade when the new image is actually ready (no black/blank state).
+  // Not cached — fade out immediately so old image never shows on wrong tab
+  heroImg.classList.add('fade-out');
+
   _heroPending = tmp;
   tmp.onload = tmp.onerror = () => {
     if (!_heroPending) return;
     _heroPending = null;
-    heroImg.classList.add('fade-out');
-    _heroTimer = setTimeout(() => {
-      _heroTimer = null;
-      heroImg.src = cleanSrc;
-      heroImg.classList.remove('fade-out');
-    }, 80);
+    heroImg.src = cleanSrc;
+    heroImg.classList.remove('fade-out');
   };
 }
 
