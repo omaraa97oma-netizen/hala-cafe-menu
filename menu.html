@@ -2893,14 +2893,19 @@ function updateHero(img, name, desc, price) {
   heroDesc.textContent = desc;
   heroPrice.textContent = price;
 
-  if (heroImg.getAttribute('src') === cleanSrc) return;
+  if (heroImg.getAttribute('src') === cleanSrc) {
+    heroImg.classList.remove('fade-out');
+    heroCaption.classList.remove('fade-out');
+    return;
+  }
 
   const tmp = new Image();
   tmp.src = cleanSrc;
 
   if (tmp.complete) {
-    // Cached — instant swap
     heroImg.src = cleanSrc;
+    heroImg.classList.remove('fade-out');
+    heroCaption.classList.remove('fade-out');
     return;
   }
 
