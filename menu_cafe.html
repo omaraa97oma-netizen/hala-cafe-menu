@@ -99,7 +99,7 @@ body {
 #hero-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover;
-  transition: opacity .4s ease, transform .45s ease;
+  transition: opacity .18s ease, transform .2s ease;
 }
 #hero-img.fade-out { opacity: 0; transform: scale(1.04); }
 #hero-caption { transition: opacity .35s ease, transform .35s ease; }
@@ -2915,18 +2915,25 @@ function updateHero(img, name, desc, price) {
   if (heroImg.getAttribute('src') === cleanSrc) return;
   heroImg.classList.add('fade-out');
   heroCaption.classList.add('fade-out');
-  let loaded = false, timerDone = false;
-  function doSwap() {
-    if (!loaded || !timerDone) return;
+  const tmp = new Image();
+  tmp.onload = () => {
     heroImg.src = cleanSrc;
     heroImg.classList.remove('fade-out');
     heroCaption.classList.remove('fade-out');
-  }
-  const tmp = new Image();
-  tmp.onload = () => { loaded = true; doSwap(); };
-  tmp.onerror = () => { loaded = true; doSwap(); };
+  };
+  tmp.onerror = () => {
+    heroImg.src = cleanSrc;
+    heroImg.classList.remove('fade-out');
+    heroCaption.classList.remove('fade-out');
+  };
   tmp.src = cleanSrc;
-  setTimeout(() => { timerDone = true; doSwap(); }, 350);
+  setTimeout(() => {
+    if (heroImg.getAttribute('src') !== cleanSrc) {
+      heroImg.src = cleanSrc;
+      heroImg.classList.remove('fade-out');
+      heroCaption.classList.remove('fade-out');
+    }
+  }, 150);
 }
 
 /* preload only first image per category — fast & light */
@@ -3026,7 +3033,7 @@ let sheetCurrentName  = '';
 let sheetCurrentPrice = '';
 
 function openMobileSheet(img, name, desc, price) {
-  sheetImg.src        = img.split('?')[0] + '?v=' + Date.now();
+  sheetImg.src        = img.split('?')[0];
   sheetName.textContent  = name;
   sheetDesc.textContent  = desc;
   sheetPrice.textContent = price;
