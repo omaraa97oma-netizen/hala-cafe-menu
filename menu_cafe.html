@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="preload" as="image" href="assets/logo.jpg" />
 <link rel="preload" as="image" href="assets/hero/hot_espresso_single.webp" />
 <style>
 /* ═══════════════════ RESET & VARS ═══════════════════════ */
@@ -49,7 +50,9 @@ body {
   position: relative; z-index: 2;
   display: flex; flex-direction: column; align-items: center; gap: 16px;
   opacity: 0;
-  animation: blobContentIn 0.5s ease 0.4s forwards;
+}
+#splash-inner.logo-ready {
+  animation: blobContentIn 0.5s ease 0.1s forwards;
 }
 @keyframes blobContentIn {
   from { opacity:0; transform: scale(.85); }
@@ -182,6 +185,27 @@ body {
   overflow: hidden;
   background: var(--cream);
 }
+
+/* Main tabs */
+#main-tabs {
+  flex-shrink: 0;
+  display: flex;
+  border-bottom: 2px solid var(--cream2);
+  background: var(--white);
+}
+.main-tab {
+  flex: 1; padding: 10px 4px; text-align: center;
+  font-family: 'Cairo', sans-serif; font-size: .74rem; font-weight: 700;
+  color: var(--text-mid); cursor: pointer;
+  border: none; background: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: color .2s, border-color .2s;
+  white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.main-tab:hover { color: var(--olive); }
+.main-tab.active { color: var(--olive); border-bottom-color: var(--gold); }
 
 /* Category Nav */
 #cat-nav-wrap {
@@ -662,6 +686,15 @@ body {
   <canvas id="blob-canvas"></canvas>
   <div id="splash-inner">
     <img id="splash-logo-img" src="assets/logo.jpg" alt="هلا كافيه" />
+    <script>
+    (function(){
+      var img=document.getElementById('splash-logo-img');
+      var inner=document.getElementById('splash-inner');
+      function show(){ inner.classList.add('logo-ready'); }
+      if(img.complete && img.naturalHeight!==0){ show(); }
+      else{ img.addEventListener('load',show); img.addEventListener('error',show); setTimeout(show,800); }
+    })();
+    </script>
     <div id="splash-title">هلا كافيه</div>
     <div id="splash-subtitle">يالتسوى عندي الدنيا كلها</div>
   </div>
@@ -725,8 +758,16 @@ body {
 
   <!-- RIGHT PANEL -->
   <div id="right-panel">
-    <!-- Category nav -->
-    <div id="cat-nav-wrap">
+    <!-- Main 4 tabs -->
+    <div id="main-tabs">
+      <button class="main-tab active" data-group="desserts">🍰 الحلويات</button>
+      <button class="main-tab" data-group="cold">🧃 المشروبات الباردة</button>
+      <button class="main-tab" data-group="hot">☕ المشروبات الساخنة</button>
+      <button class="main-tab" data-group="hookah">💨 الأراجيل</button>
+    </div>
+
+    <!-- Category nav (hidden, used by JS) -->
+    <div id="cat-nav-wrap" style="display:none">
     <nav id="cat-nav">
       <button class="cat-btn active" data-cat="crepe">🫔 كريب</button>
       <button class="cat-btn" data-cat="waffle">🧇 وافل</button>
@@ -2931,6 +2972,44 @@ function showCat(cat) {
 
 catBtns.forEach(btn => {
   btn.addEventListener('click', () => showCat(btn.dataset.cat));
+});
+
+// Main tabs logic
+const mainTabs = document.querySelectorAll('.main-tab');
+const groupMap = {
+  desserts: ['crepe','waffle','pancake','cheesecake','brownies','sansebastian','icecream'],
+  cold:     ['juices2','cocktail','smoothie','milkshake','mojito','energy','icedcoffee','frappe'],
+  hot:      ['hot2'],
+  hookah:   ['hookah']
+};
+
+function showGroup(group) {
+  mainTabs.forEach(t => t.classList.remove('active'));
+  document.querySelector(`.main-tab[data-group="${group}"]`).classList.add('active');
+  catGroups.forEach(g => {
+    if (groupMap[group].includes(g.dataset.cat)) {
+      g.classList.add('show');
+    } else {
+      g.classList.remove('show');
+    }
+  });
+  document.getElementById('product-list').scrollTop = 0;
+  const firstGroup = document.querySelector(`.cat-group[data-cat="${groupMap[group][0]}"]`);
+  if (firstGroup) {
+    const firstRow = firstGroup.querySelector('.product-row');
+    if (firstRow) {
+      document.querySelectorAll('.product-row').forEach(r => r.classList.remove('active'));
+      firstRow.classList.add('active');
+      updateHero(firstRow.dataset.img, firstRow.dataset.name, firstRow.dataset.desc, firstRow.dataset.price);
+    }
+  }
+  const groupNames = { desserts:'الحلويات', cold:'المشروبات الباردة', hot:'المشروبات الساخنة', hookah:'الأراجيل' };
+  rightTitle.textContent = groupNames[group];
+  rightCount.textContent = '';
+}
+
+mainTabs.forEach(tab => {
+  tab.addEventListener('click', () => showGroup(tab.dataset.group));
 });
 
 /* ── Mobile bottom sheet logic ── */
