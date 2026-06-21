@@ -2945,8 +2945,7 @@ function updateHero(img, name, desc, price) {
   tmp.onload = tmp.onerror = () => { imgReady = true; trySwap(); };
   tmp.src = cleanSrc;
   _heroPending = tmp;
-  _heroTimer = setTimeout(() => { timeReady = true; trySwap(); }, 80);
-  setTimeout(() => { imgReady = true; timeReady = true; trySwap(); }, 700);
+  _heroTimer = setTimeout(() => { _heroTimer = null; timeReady = true; trySwap(); }, 80);
 }
 
 /* preload only first image per category — fast & light */

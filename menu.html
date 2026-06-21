@@ -2913,8 +2913,7 @@ function updateHero(img, name, desc, price) {
   tmp.src = cleanSrc;
   _heroPending = tmp;
   // 280ms: fade-out mostly done; 700ms hard fallback if image slow
-  _heroTimer = setTimeout(() => { timeReady = true; trySwap(); }, 80);
-  setTimeout(() => { imgReady = true; timeReady = true; trySwap(); }, 700);
+  _heroTimer = setTimeout(() => { _heroTimer = null; timeReady = true; trySwap(); }, 80);
 }
 
 /* preload only first image per category — fast & light */
