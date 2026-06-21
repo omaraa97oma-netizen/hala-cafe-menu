@@ -99,12 +99,12 @@ body {
 #hero-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover;
-  transition: opacity .32s ease, transform .35s ease;
+  transition: opacity .18s ease, transform .18s ease;
   will-change: opacity, transform;
 }
-#hero-img.fade-out { opacity: 0; transform: scale(1.05); }
-#hero-caption { transition: opacity .26s ease, transform .26s ease; will-change: opacity, transform; }
-#hero-caption.fade-out { opacity: 0; transform: translateY(8px); }
+#hero-img.fade-out { opacity: 0; transform: scale(1.03); }
+#hero-caption { transition: opacity .15s ease, transform .15s ease; will-change: opacity, transform; }
+#hero-caption.fade-out { opacity: 0; transform: translateY(6px); }
 #left-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(
@@ -2882,12 +2882,13 @@ let _heroTimer = null;
 let _heroPending = null;
 function updateHero(img, name, desc, price) {
   const cleanSrc = img.split('?')[0];
-  heroName.textContent = name;
-  heroDesc.textContent = desc;
-  heroPrice.textContent = price;
 
   if (_heroTimer) { clearTimeout(_heroTimer); _heroTimer = null; }
   if (_heroPending) { _heroPending.onload = _heroPending.onerror = null; _heroPending = null; }
+
+  heroName.textContent = name;
+  heroDesc.textContent = desc;
+  heroPrice.textContent = price;
 
   if (heroImg.getAttribute('src') === cleanSrc) {
     heroImg.classList.remove('fade-out');
@@ -2895,25 +2896,35 @@ function updateHero(img, name, desc, price) {
     return;
   }
 
-  heroImg.classList.add('fade-out');
-  heroCaption.classList.add('fade-out');
+  const tmp = new Image();
+  tmp.src = cleanSrc;
 
-  // swap only when BOTH: fade-out has time to run (≥280ms) AND image is loaded
-  let imgReady = false, timeReady = false;
-  function trySwap() {
-    if (!imgReady || !timeReady) return;
+  if (tmp.complete) {
+    // Already in browser cache — instant swap, no fade needed
     heroImg.src = cleanSrc;
     heroImg.classList.remove('fade-out');
     heroCaption.classList.remove('fade-out');
-    _heroPending = null; _heroTimer = null;
+    return;
   }
 
-  const tmp = new Image();
-  tmp.onload = tmp.onerror = () => { imgReady = true; trySwap(); };
-  tmp.src = cleanSrc;
+  // Not yet in memory cache — fade while loading
   _heroPending = tmp;
-  // 280ms: fade-out mostly done; 700ms hard fallback if image slow
-  _heroTimer = setTimeout(() => { _heroTimer = null; timeReady = true; trySwap(); }, 80);
+  heroImg.classList.add('fade-out');
+  heroCaption.classList.add('fade-out');
+
+  const doSwap = () => {
+    if (!_heroPending) return; // cancelled by tab switch
+    _heroPending = null;
+    if (_heroTimer) { clearTimeout(_heroTimer); _heroTimer = null; }
+    heroImg.src = cleanSrc;
+    heroImg.classList.remove('fade-out');
+    heroCaption.classList.remove('fade-out');
+  };
+
+  tmp.onload = tmp.onerror = doSwap;
+
+  // Safety valve: force swap if onload never fires
+  _heroTimer = setTimeout(() => { _heroTimer = null; doSwap(); }, 3000);
 }
 
 /* preload only first image per category — fast & light */
@@ -2949,6 +2960,8 @@ function showCat(cat) {
     document.getElementById('product-list').scrollTop = 0;
     const firstRow = group.querySelector('.product-row');
     if (firstRow) {
+      if (_activeRow) _activeRow.classList.remove('active');
+      _activeRow = firstRow;
       firstRow.classList.add('active');
       updateHero(firstRow.dataset.img, firstRow.dataset.name, firstRow.dataset.desc, firstRow.dataset.price);
     }
