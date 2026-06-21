@@ -3062,7 +3062,6 @@ rows.forEach(row => {
     _activeRow = row;
     row.classList.add('active');
     updateHero(row.dataset.img, row.dataset.name, row.dataset.desc, row.dataset.price);
-    if (isMobile()) openMobileSheet(row.dataset.img, row.dataset.name, row.dataset.desc, row.dataset.price);
   });
 });
 
