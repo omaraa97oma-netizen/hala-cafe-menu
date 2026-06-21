@@ -3130,6 +3130,26 @@ rows.forEach(row => {
 // Open on كريب by default
 showCat('crepe');
 
+// Silently preload ALL hero images during idle time so every future click is instant
+setTimeout(() => {
+  const srcs = [...new Set(
+    [...document.querySelectorAll('[data-img]')]
+      .map(r => r.dataset.img.split('?')[0]).filter(Boolean)
+  )];
+  let idx = 0;
+  const step = () => {
+    if (idx >= srcs.length) return;
+    const img = new Image();
+    img.src = srcs[idx++];
+    img.onload = img.onerror = () => {
+      if (typeof requestIdleCallback !== 'undefined') requestIdleCallback(step, { timeout: 500 });
+      else setTimeout(step, 60);
+    };
+  };
+  if (typeof requestIdleCallback !== 'undefined') requestIdleCallback(step, { timeout: 500 });
+  else step();
+}, 2000);
+
 /* ══════════════════════════════════════════════════════════
    CART SYSTEM
 ══════════════════════════════════════════════════════════ */

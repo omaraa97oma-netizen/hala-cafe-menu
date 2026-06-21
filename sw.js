@@ -1,4 +1,4 @@
-const CACHE = 'hala-v1';
+const CACHE = 'hala-v2';
 
 const PRECACHE = [
   '/menu',
