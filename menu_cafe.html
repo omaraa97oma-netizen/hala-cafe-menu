@@ -739,7 +739,7 @@ body {
 
   <!-- LEFT PANEL -->
   <div id="left-panel">
-    <img id="hero-img" src="assets/hero/hot_espresso_single.webp" alt="" />
+    <img id="hero-img" src="assets/hero/crepe_chocolate.webp" alt="" />
     <div id="left-overlay"></div>
     <div id="left-brand">
       <img id="left-logo" src="assets/logo.jpg" alt="هلا كافيه" />
@@ -3004,21 +3004,35 @@ const groupMap = {
 function showGroup(group) {
   mainTabs.forEach(t => t.classList.remove('active'));
   document.querySelector(`.main-tab[data-group="${group}"]`).classList.add('active');
+  const cats = groupMap[group];
   catGroups.forEach(g => {
-    if (groupMap[group].includes(g.dataset.cat)) {
-      g.classList.add('show');
-    } else {
-      g.classList.remove('show');
-    }
+    g.classList.remove('show');
+    if (cats.includes(g.dataset.cat)) g.style.animation = 'none';
   });
   document.getElementById('product-list').scrollTop = 0;
+  void document.getElementById('product-list').offsetHeight;
+  let _gi = 0;
+  catGroups.forEach(g => {
+    if (cats.includes(g.dataset.cat)) {
+      g.style.animation = '';
+      g.style.animationDelay = (_gi++ * 55) + 'ms';
+      g.classList.add('show');
+    }
+  });
   const firstGroup = document.querySelector(`.cat-group[data-cat="${groupMap[group][0]}"]`);
   if (firstGroup) {
     const firstRow = firstGroup.querySelector('.product-row');
     if (firstRow) {
       document.querySelectorAll('.product-row').forEach(r => r.classList.remove('active'));
       firstRow.classList.add('active');
-      updateHero(firstRow.dataset.img, firstRow.dataset.name, firstRow.dataset.desc, firstRow.dataset.price);
+      if (_heroTimer) { clearTimeout(_heroTimer); _heroTimer = null; }
+      if (_heroPending) { _heroPending.onload = _heroPending.onerror = null; _heroPending = null; }
+      heroImg.classList.remove('fade-out');
+      heroCaption.classList.remove('fade-out');
+      heroImg.src = firstRow.dataset.img.split('?')[0];
+      heroName.textContent = firstRow.dataset.name;
+      heroDesc.textContent = firstRow.dataset.desc;
+      heroPrice.textContent = firstRow.dataset.price;
     }
   }
   const groupNames = { desserts:'الحلويات', cold:'المشروبات الباردة', hot:'المشروبات الساخنة', hookah:'الأراجيل' };
