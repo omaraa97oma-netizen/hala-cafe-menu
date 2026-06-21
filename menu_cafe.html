@@ -3120,12 +3120,13 @@ function loadGroupThumbs(cats) {
     const g = document.querySelector(`.cat-group[data-cat="${cat}"]`);
     if (!g) return;
     g.querySelectorAll('.pr-icon').forEach(icon => {
-      const src = icon.dataset.lazySrc;
-      if (!src) return;
+      const heroSrc = icon.dataset.lazySrc;
+      if (!heroSrc) return;
       delete icon.dataset.lazySrc;
-      const apply = () => { icon.style.backgroundImage = `url('${src}')`; icon.classList.add('has-img'); };
+      const thumbSrc = heroSrc.replace('assets/hero/', 'assets/thumb/');
+      const apply = () => { icon.style.backgroundImage = `url('${thumbSrc}')`; icon.classList.add('has-img'); };
       const tmp = new Image();
-      tmp.src = src;
+      tmp.src = thumbSrc;
       if (tmp.complete) { apply(); } else { tmp.onload = tmp.onerror = apply; }
     });
   });
