@@ -3004,6 +3004,7 @@ function showCat(cat) {
   document.querySelectorAll(`.cat-btn[data-cat="${cat}"]`).forEach(b => b.classList.add('active'));
   rightTitle.textContent = catNames[cat] || '';
   rightCount.textContent = catCounts[cat] || '';
+  requestAnimationFrame(() => loadGroupThumbs([cat]));
 }
 
 catBtns.forEach(btn => {
@@ -3048,19 +3049,13 @@ function showGroup(group) {
       if (_activeRow) _activeRow.classList.remove('active');
       _activeRow = firstRow;
       firstRow.classList.add('active');
-      if (_heroTimer) { clearTimeout(_heroTimer); _heroTimer = null; }
-      if (_heroPending) { _heroPending.onload = _heroPending.onerror = null; _heroPending = null; }
-      heroImg.classList.remove('fade-out');
-      heroCaption.classList.remove('fade-out');
-      heroImg.src = firstRow.dataset.img.split('?')[0];
-      heroName.textContent = firstRow.dataset.name;
-      heroDesc.textContent = firstRow.dataset.desc;
-      heroPrice.textContent = firstRow.dataset.price;
+      updateHero(firstRow.dataset.img, firstRow.dataset.name, firstRow.dataset.desc, firstRow.dataset.price);
     }
   }
   const groupNames = { desserts:'الحلويات', cold:'المشروبات الباردة', hot:'المشروبات الساخنة', hookah:'الأراجيل' };
   rightTitle.textContent = groupNames[group];
   rightCount.textContent = '';
+  requestAnimationFrame(() => loadGroupThumbs(cats));
 }
 
 mainTabs.forEach(tab => {
@@ -3114,33 +3109,27 @@ if (sheetAdd) {
 
 const isMobile = () => window.innerWidth <= 768;
 
-// Lazy-load thumbnails — only load what's visible, not all 216 at once
-const productListEl = document.getElementById('product-list');
-const iconObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    const icon = entry.target;
-    const src = icon.dataset.lazySrc;
-    if (!src) return;
-    iconObserver.unobserve(icon);
-    delete icon.dataset.lazySrc;
-    const apply = () => {
-      icon.style.backgroundImage = `url('${src}')`;
-      icon.classList.add('has-img');
-    };
-    const tmp = new Image();
-    tmp.src = src;
-    if (tmp.complete) { apply(); } else { tmp.onload = tmp.onerror = apply; }
-  });
-}, { root: productListEl, rootMargin: '400px 0px' });
-
+// Store lazy src — thumbnails load per-group when tab switches (reliable on all browsers)
 rows.forEach(row => {
   const icon = row.querySelector('.pr-icon');
-  if (row.dataset.img && icon) {
-    icon.dataset.lazySrc = row.dataset.img.split('?')[0];
-    iconObserver.observe(icon);
-  }
+  if (row.dataset.img && icon) icon.dataset.lazySrc = row.dataset.img.split('?')[0];
 });
+
+function loadGroupThumbs(cats) {
+  cats.forEach(cat => {
+    const g = document.querySelector(`.cat-group[data-cat="${cat}"]`);
+    if (!g) return;
+    g.querySelectorAll('.pr-icon').forEach(icon => {
+      const src = icon.dataset.lazySrc;
+      if (!src) return;
+      delete icon.dataset.lazySrc;
+      const apply = () => { icon.style.backgroundImage = `url('${src}')`; icon.classList.add('has-img'); };
+      const tmp = new Image();
+      tmp.src = src;
+      if (tmp.complete) { apply(); } else { tmp.onload = tmp.onerror = apply; }
+    });
+  });
+}
 
 // Open on كريب by default
 showCat('crepe');
