@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="preload" as="image" href="assets/logo.jpg" />
-<link rel="preload" as="image" href="assets/hero/hot_espresso_single.webp" />
+<link rel="preload" as="image" href="assets/hero/crepe_chocolate.webp" />
 <style>
 /* ═══════════════════ RESET & VARS ═══════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -99,11 +99,12 @@ body {
 #hero-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover;
-  transition: opacity .38s ease, transform .4s ease;
+  transition: opacity .32s ease, transform .35s ease;
+  will-change: opacity, transform;
 }
-#hero-img.fade-out { opacity: 0; transform: scale(1.04); }
-#hero-caption { transition: opacity .32s ease, transform .32s ease; }
-#hero-caption.fade-out { opacity: 0; transform: translateY(6px); }
+#hero-img.fade-out { opacity: 0; transform: scale(1.05); }
+#hero-caption { transition: opacity .26s ease, transform .26s ease; will-change: opacity, transform; }
+#hero-caption.fade-out { opacity: 0; transform: translateY(8px); }
 #left-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(
@@ -272,10 +273,10 @@ body {
 
 /* Category group */
 .cat-group { padding: 0 0 12px; display: none; }
-.cat-group.show { display: block; animation: groupIn .38s cubic-bezier(.25,.46,.45,.94) both; }
+.cat-group.show { display: block; animation: groupIn .4s cubic-bezier(.22,.68,0,1.2) both; will-change: opacity, transform; }
 @keyframes groupIn {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(18px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 .cat-group-title {
   font-family: 'El Messiri', serif;
@@ -2885,7 +2886,6 @@ function updateHero(img, name, desc, price) {
   heroDesc.textContent = desc;
   heroPrice.textContent = price;
 
-  // Cancel any in-flight transition immediately
   if (_heroTimer) { clearTimeout(_heroTimer); _heroTimer = null; }
   if (_heroPending) { _heroPending.onload = _heroPending.onerror = null; _heroPending = null; }
 
@@ -2898,20 +2898,23 @@ function updateHero(img, name, desc, price) {
   heroImg.classList.add('fade-out');
   heroCaption.classList.add('fade-out');
 
-  function swap() {
+  // swap only when BOTH: fade-out has time to run (≥280ms) AND image is loaded
+  let imgReady = false, timeReady = false;
+  function trySwap() {
+    if (!imgReady || !timeReady) return;
     heroImg.src = cleanSrc;
     heroImg.classList.remove('fade-out');
     heroCaption.classList.remove('fade-out');
-    _heroPending = null;
-    _heroTimer = null;
+    _heroPending = null; _heroTimer = null;
   }
 
   const tmp = new Image();
-  tmp.onload = swap;
-  tmp.onerror = swap;
+  tmp.onload = tmp.onerror = () => { imgReady = true; trySwap(); };
   tmp.src = cleanSrc;
   _heroPending = tmp;
-  _heroTimer = setTimeout(swap, 360);
+  // 280ms: fade-out mostly done; 700ms hard fallback if image slow
+  _heroTimer = setTimeout(() => { timeReady = true; trySwap(); }, 280);
+  setTimeout(() => { imgReady = true; timeReady = true; trySwap(); }, 700);
 }
 
 /* preload only first image per category — fast & light */
@@ -2925,10 +2928,12 @@ function updateHero(img, name, desc, price) {
   });
 })();
 
+let _activeRow = null;
 rows.forEach(row => {
   row.addEventListener('click', (e) => {
     if (e.target.closest('.pr-add')) return;
-    rows.forEach(r => r.classList.remove('active'));
+    if (_activeRow) _activeRow.classList.remove('active');
+    _activeRow = row;
     row.classList.add('active');
     updateHero(row.dataset.img, row.dataset.name, row.dataset.desc, row.dataset.price);
   });
@@ -2972,29 +2977,34 @@ function showGroup(group) {
   mainTabs.forEach(t => t.classList.remove('active'));
   document.querySelector(`.main-tab[data-group="${group}"]`).classList.add('active');
   const cats = groupMap[group];
-  // Step 1: remove .show from all; on groups-to-show also disable animation temporarily
+  const productList = document.getElementById('product-list');
+
+  // Hide all groups; flag selected ones for animation restart
   catGroups.forEach(g => {
     g.classList.remove('show');
-    if (cats.includes(g.dataset.cat)) g.style.animation = 'none';
+    g.style.animationDelay = '';
+    if (cats.includes(g.dataset.cat)) g.style.animationName = 'none';
   });
-  document.getElementById('product-list').scrollTop = 0;
-  // Step 2: force reflow — browser commits display:none + animation:none state
-  void document.getElementById('product-list').offsetHeight;
-  // Step 3: lift override, set stagger delay, add .show → animation restarts on every tab
-  let _gi = 0;
+  productList.scrollTop = 0;
+  // One reflow to commit display:none state on selected groups
+  void productList.offsetHeight;
+  // Show with stagger — animationName cleared so browser re-runs groupIn
+  let _si = 0;
   catGroups.forEach(g => {
     if (cats.includes(g.dataset.cat)) {
-      g.style.animation = '';
-      g.style.animationDelay = (_gi++ * 55) + 'ms';
+      g.style.animationName = '';
+      g.style.animationDelay = (_si++ * 50) + 'ms';
       g.classList.add('show');
     }
   });
-  // activate first product in group — instant swap, no fade lag on tab switch
-  const firstGroup = document.querySelector(`.cat-group[data-cat="${groupMap[group][0]}"]`);
+
+  // Instant hero swap for tab switch (no fade lag)
+  const firstGroup = document.querySelector(`.cat-group[data-cat="${cats[0]}"]`);
   if (firstGroup) {
     const firstRow = firstGroup.querySelector('.product-row');
     if (firstRow) {
-      document.querySelectorAll('.product-row').forEach(r => r.classList.remove('active'));
+      if (_activeRow) _activeRow.classList.remove('active');
+      _activeRow = firstRow;
       firstRow.classList.add('active');
       if (_heroTimer) { clearTimeout(_heroTimer); _heroTimer = null; }
       if (_heroPending) { _heroPending.onload = _heroPending.onerror = null; _heroPending = null; }
@@ -3102,15 +3112,11 @@ rows.forEach(row => {
 
 // Track currently selected product for left-panel button
 let currentProduct = { name: '', price: '' };
-const origUpdateHero = updateHero;
 rows.forEach(row => {
   row.addEventListener('click', () => {
     currentProduct = { name: row.dataset.name, price: row.dataset.price };
   });
 });
-// init with first row
-const firstRow = document.querySelector('.product-row');
-if (firstRow) currentProduct = { name: firstRow.dataset.name, price: firstRow.dataset.price };
 
 function addCurrentToCart() {
   if (!currentProduct.name) return;
