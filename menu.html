@@ -118,11 +118,11 @@ body {
 #hero-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover;
-  transition: opacity .18s ease, transform .18s ease;
+  transition: opacity .12s ease, transform .12s ease;
   will-change: opacity, transform;
 }
 #hero-img.fade-out { opacity: 0; transform: scale(1.03); }
-#hero-caption { transition: opacity .15s ease, transform .15s ease; will-change: opacity, transform; }
+#hero-caption { transition: opacity .12s ease, transform .12s ease; will-change: opacity, transform; }
 #hero-caption.fade-out { opacity: 0; transform: translateY(6px); }
 #left-overlay {
   position: absolute; inset: 0;
@@ -609,6 +609,67 @@ body {
   text-align: center; padding: 36px 0;
   color: var(--text-mid); font-size: .9rem; display: none;
 }
+
+/* ═══ MOBILE ITEM SHEET ═══ */
+#mobile-item-sheet {
+  position: fixed; inset: 0; z-index: 800;
+  display: none; align-items: flex-end;
+}
+#mobile-item-sheet.open { display: flex; }
+#mobile-sheet-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(28,36,16,.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+#mobile-sheet-card {
+  position: relative; z-index: 1;
+  width: 100%; background: var(--cream);
+  border-radius: 24px 24px 0 0;
+  overflow: hidden;
+  animation: sheetUp .28s cubic-bezier(.22,1,.36,1);
+  max-height: 85vh;
+  display: flex; flex-direction: column;
+}
+#mobile-sheet-img {
+  width: 100%; height: 200px; object-fit: cover; flex-shrink: 0;
+}
+#mobile-sheet-body {
+  padding: 16px 20px 28px; overflow-y: auto;
+}
+#mobile-sheet-name {
+  font-family: 'El Messiri', serif;
+  font-size: 1.25rem; font-weight: 700; color: var(--olive);
+  margin-bottom: 6px;
+}
+#mobile-sheet-desc {
+  font-size: .88rem; color: var(--text-mid);
+  margin-bottom: 14px; line-height: 1.5;
+}
+#mobile-sheet-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+#mobile-sheet-price {
+  font-size: 1.15rem; font-weight: 900; color: var(--gold-d);
+  font-family: 'Cairo', sans-serif;
+}
+#mobile-sheet-add {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 22px; border-radius: 50px;
+  background: var(--gold); color: var(--olive);
+  font-family: 'Cairo', sans-serif; font-size: .88rem;
+  font-weight: 800; border: none; cursor: pointer;
+  transition: background .18s;
+}
+#mobile-sheet-add:active { background: var(--gold-l); }
+#mobile-sheet-close {
+  position: absolute; top: 10px; right: 10px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(0,0,0,.45); border: none; color: #fff;
+  font-size: .85rem; cursor: pointer; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+}
 </style>
 
 <!-- PROFESSIONAL UI FIXES -->
@@ -715,7 +776,7 @@ body {
 <!-- mobile-topbar is placed inside #app below -->
 
 <!-- ═════════════ MOBILE ITEM SHEET (hidden on desktop) ═══ -->
-<div id="mobile-item-sheet" style="display:none;">
+<div id="mobile-item-sheet">
   <div id="mobile-sheet-backdrop"></div>
   <div id="mobile-sheet-card">
     <button id="mobile-sheet-close">✕</button>
@@ -2904,11 +2965,11 @@ function updateHero(img, name, desc, price) {
   if (_heroTimer) { clearTimeout(_heroTimer); _heroTimer = null; }
   if (_heroPending) { _heroPending.onload = _heroPending.onerror = null; _heroPending = null; }
 
-  heroName.textContent = name;
-  heroDesc.textContent = desc;
-  heroPrice.textContent = price;
-
+  // We keep the old text during fade-out to prevent text switching before the image does
   if (heroImg.getAttribute('src') === cleanSrc) {
+    heroName.textContent = name;
+    heroDesc.textContent = desc;
+    heroPrice.textContent = price;
     heroImg.classList.remove('fade-out');
     heroCaption.classList.remove('fade-out');
     return;
@@ -2919,13 +2980,15 @@ function updateHero(img, name, desc, price) {
 
   if (tmp.complete) {
     heroImg.src = cleanSrc;
+    heroName.textContent = name;
+    heroDesc.textContent = desc;
+    heroPrice.textContent = price;
     heroImg.classList.remove('fade-out');
     heroCaption.classList.remove('fade-out');
     return;
   }
 
-  // Fade out immediately — gives instant visual feedback on mobile
-  // Swap happens after fade completes AND image is loaded (whichever is later)
+  // Fade out immediately — gives instant visual feedback
   heroImg.classList.add('fade-out');
   heroCaption.classList.add('fade-out');
 
@@ -2933,6 +2996,9 @@ function updateHero(img, name, desc, price) {
   let imgLoaded = false;
   const swap = () => {
     heroImg.src = cleanSrc;
+    heroName.textContent = name;
+    heroDesc.textContent = desc;
+    heroPrice.textContent = price;
     heroImg.classList.remove('fade-out');
     heroCaption.classList.remove('fade-out');
   };
@@ -2941,7 +3007,7 @@ function updateHero(img, name, desc, price) {
     _heroTimer = null;
     timerDone = true;
     if (imgLoaded) swap();
-  }, 180);
+  }, 120);
 
   _heroPending = tmp;
   tmp.onload = tmp.onerror = () => {
@@ -2971,6 +3037,7 @@ rows.forEach(row => {
     _activeRow = row;
     row.classList.add('active');
     updateHero(row.dataset.img, row.dataset.name, row.dataset.desc, row.dataset.price);
+    if (isMobile()) openMobileSheet(row.dataset.img, row.dataset.name, row.dataset.desc, row.dataset.price);
   });
 });
 
@@ -3034,7 +3101,7 @@ function showGroup(group) {
   catGroups.forEach(g => {
     if (cats.includes(g.dataset.cat)) {
       g.style.animationName = '';
-      g.style.animationDelay = (_si++ * 50) + 'ms';
+      g.style.animationDelay = (_si++ * 20) + 'ms';
       g.classList.add('show');
     }
   });
