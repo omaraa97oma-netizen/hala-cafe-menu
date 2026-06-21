@@ -91,7 +91,7 @@ body {
   font-size: .95rem; color: var(--text-mid); font-weight: 400;
 }
 #splash.exit {
-  animation: splashFadeOut 0.6s ease 2s forwards;
+  animation: splashFadeOut 0.3s ease 0s forwards;
   pointer-events: none;
 }
 @keyframes splashFadeOut {
@@ -2834,8 +2834,8 @@ body {
   let contractDone = false;
   let radius = 0;
   const MAX_RADIUS_FACTOR = 1.5;
-  const EXPAND_SPEED = 0.04;
-  const CONTRACT_SPEED = 0.05;
+  const EXPAND_SPEED = 0.08;
+  const CONTRACT_SPEED = 0.12;
   let holdTimer = null;
   const COLOR = '#FAF8F3';
 
@@ -2885,7 +2885,7 @@ body {
         ctx.fillStyle = COLOR;
         ctx.fillRect(0, 0, W, H);
         phase = 'hold';
-        holdTimer = setTimeout(() => { phase = 'contract'; }, 900);
+        holdTimer = setTimeout(() => { phase = 'contract'; }, 200);
       }
       drawBlob(radius);
     } else if (phase === 'hold') {
@@ -2904,7 +2904,7 @@ body {
         const hideSplash = () => { splash.style.display = 'none'; };
         splash.classList.add('exit');
         splash.addEventListener('animationend', hideSplash, { once: true });
-        setTimeout(hideSplash, 3200);
+        setTimeout(hideSplash, 600);
         return;
       }
     }
@@ -3169,11 +3169,11 @@ function loadGroupThumbs(cats) {
 // Open on كريب by default
 showCat('crepe');
 
-// Global splash safety net — force-hide after 7s regardless of animation state
+// Global splash safety net — force-hide after 3s regardless of animation state
 setTimeout(() => {
   const s = document.getElementById('splash');
   if (s && s.style.display !== 'none') { s.style.display = 'none'; }
-}, 7000);
+}, 3000);
 
 // Silently preload ALL hero images during idle time so every future click is instant
 setTimeout(() => {
