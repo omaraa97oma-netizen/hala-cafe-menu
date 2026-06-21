@@ -2881,12 +2881,12 @@ body {
         contractDone = true;
         ctx.clearRect(0, 0, W, H);
         cancelAnimationFrame(raf);
-        // Hide splash
+        // Hide splash — timeout is the primary guard; animationend is bonus
         const splash = document.getElementById('splash');
+        const hideSplash = () => { splash.style.display = 'none'; };
         splash.classList.add('exit');
-        splash.addEventListener('animationend', () => {
-          splash.style.display = 'none';
-        }, { once: true });
+        splash.addEventListener('animationend', hideSplash, { once: true });
+        setTimeout(hideSplash, 3200);
         return;
       }
     }
@@ -2914,51 +2914,45 @@ const catCounts = { crepe: '16 صنف', waffle: '12 صنف', pancake: '9 أصن�
 const heroCaption = document.getElementById('hero-caption');
 let _heroTimer = null;
 let _heroPending = null;
+let _heroFading = false;
 function updateHero(img, name, desc, price) {
   const cleanSrc = img.split('?')[0];
 
   if (_heroTimer) { clearTimeout(_heroTimer); _heroTimer = null; }
   if (_heroPending) { _heroPending.onload = _heroPending.onerror = null; _heroPending = null; }
+  if (_heroFading) { heroImg.classList.remove('fade-out'); heroCaption.classList.remove('fade-out'); _heroFading = false; }
 
   heroName.textContent = name;
   heroDesc.textContent = desc;
   heroPrice.textContent = price;
 
-  if (heroImg.getAttribute('src') === cleanSrc) {
-    heroImg.classList.remove('fade-out');
-    heroCaption.classList.remove('fade-out');
-    return;
-  }
+  if (heroImg.getAttribute('src') === cleanSrc) return;
 
   const tmp = new Image();
   tmp.src = cleanSrc;
 
   if (tmp.complete) {
-    // Already in browser cache — instant swap, no fade needed
     heroImg.src = cleanSrc;
-    heroImg.classList.remove('fade-out');
-    heroCaption.classList.remove('fade-out');
     return;
   }
 
-  // Not yet in memory cache — fade while loading
+  // Not yet cached — keep old image visible while new one loads in background.
+  // Only fade when the new image is actually ready, so there's never a blank state.
   _heroPending = tmp;
-  heroImg.classList.add('fade-out');
-  heroCaption.classList.add('fade-out');
-
-  const doSwap = () => {
-    if (!_heroPending) return; // cancelled by tab switch
+  tmp.onload = tmp.onerror = () => {
+    if (!_heroPending) return;
     _heroPending = null;
-    if (_heroTimer) { clearTimeout(_heroTimer); _heroTimer = null; }
-    heroImg.src = cleanSrc;
-    heroImg.classList.remove('fade-out');
-    heroCaption.classList.remove('fade-out');
+    _heroFading = true;
+    heroImg.classList.add('fade-out');
+    heroCaption.classList.add('fade-out');
+    _heroTimer = setTimeout(() => {
+      _heroTimer = null;
+      _heroFading = false;
+      heroImg.src = cleanSrc;
+      heroImg.classList.remove('fade-out');
+      heroCaption.classList.remove('fade-out');
+    }, 185);
   };
-
-  tmp.onload = tmp.onerror = doSwap;
-
-  // Safety valve: force swap if onload never fires
-  _heroTimer = setTimeout(() => { _heroTimer = null; doSwap(); }, 3000);
 }
 
 /* preload only first image per category — fast & light */
@@ -3004,7 +2998,10 @@ function showCat(cat) {
   document.querySelectorAll(`.cat-btn[data-cat="${cat}"]`).forEach(b => b.classList.add('active'));
   rightTitle.textContent = catNames[cat] || '';
   rightCount.textContent = catCounts[cat] || '';
-  requestAnimationFrame(() => loadGroupThumbs([cat]));
+  requestAnimationFrame(() => {
+    loadGroupThumbs([cat]);
+    preloadGroupHeroes([cat]);
+  });
 }
 
 catBtns.forEach(btn => {
@@ -3055,7 +3052,10 @@ function showGroup(group) {
   const groupNames = { desserts:'الحلويات', cold:'المشروبات الباردة', hot:'المشروبات الساخنة', hookah:'الأراجيل' };
   rightTitle.textContent = groupNames[group];
   rightCount.textContent = '';
-  requestAnimationFrame(() => loadGroupThumbs(cats));
+  requestAnimationFrame(() => {
+    loadGroupThumbs(cats);
+    preloadGroupHeroes(cats);
+  });
 }
 
 mainTabs.forEach(tab => {
@@ -3115,6 +3115,16 @@ rows.forEach(row => {
   if (row.dataset.img && icon) icon.dataset.lazySrc = row.dataset.img.split('?')[0];
 });
 
+function preloadGroupHeroes(cats) {
+  cats.forEach(cat => {
+    const g = document.querySelector(`.cat-group[data-cat="${cat}"]`);
+    if (!g) return;
+    g.querySelectorAll('[data-img]').forEach(row => {
+      const src = row.dataset.img.split('?')[0];
+      if (src) { new Image().src = src; }
+    });
+  });
+}
 function loadGroupThumbs(cats) {
   cats.forEach(cat => {
     const g = document.querySelector(`.cat-group[data-cat="${cat}"]`);
@@ -3134,6 +3144,12 @@ function loadGroupThumbs(cats) {
 
 // Open on كريب by default
 showCat('crepe');
+
+// Global splash safety net — force-hide after 7s regardless of animation state
+setTimeout(() => {
+  const s = document.getElementById('splash');
+  if (s && s.style.display !== 'none') { s.style.display = 'none'; }
+}, 7000);
 
 // Silently preload ALL hero images during idle time so every future click is instant
 setTimeout(() => {
