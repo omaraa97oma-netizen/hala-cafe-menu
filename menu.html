@@ -195,15 +195,14 @@ body {
   background: var(--white);
 }
 .main-tab {
-  flex: 1; padding: 10px 4px; text-align: center;
+  flex: 1; padding: 8px 3px; text-align: center;
   font-family: 'Cairo', sans-serif; font-size: .74rem; font-weight: 700;
   color: var(--text-mid); cursor: pointer;
   border: none; background: none;
   border-bottom: 3px solid transparent;
   margin-bottom: -2px;
   transition: color .2s, border-color .2s;
-  white-space: nowrap;
-  overflow: hidden; text-overflow: ellipsis;
+  line-height: 1.25;
 }
 .main-tab:hover { color: var(--olive); }
 .main-tab.active { color: var(--olive); border-bottom-color: var(--gold); }
@@ -755,8 +754,8 @@ body {
     <!-- Main 4 tabs -->
     <div id="main-tabs">
       <button class="main-tab active" data-group="desserts">🍰 الحلويات</button>
-      <button class="main-tab" data-group="cold">🧃 المشروبات الباردة</button>
-      <button class="main-tab" data-group="hot">☕ المشروبات الساخنة</button>
+      <button class="main-tab" data-group="cold">🧃 مشروبات<br>باردة</button>
+      <button class="main-tab" data-group="hot">☕ مشروبات<br>ساخنة</button>
       <button class="main-tab" data-group="hookah">💨 الأراجيل</button>
     </div>
 

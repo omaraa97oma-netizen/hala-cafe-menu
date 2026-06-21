@@ -202,8 +202,7 @@ body {
   border-bottom: 3px solid transparent;
   margin-bottom: -2px;
   transition: color .2s, border-color .2s;
-  white-space: nowrap;
-  overflow: hidden; text-overflow: ellipsis;
+  line-height: 1.25;
 }
 .main-tab:hover { color: var(--olive); }
 .main-tab.active { color: var(--olive); border-bottom-color: var(--gold); }
@@ -766,8 +765,8 @@ body {
     <!-- Main 4 tabs -->
     <div id="main-tabs">
       <button class="main-tab active" data-group="desserts">🍰 الحلويات</button>
-      <button class="main-tab" data-group="cold">🧃 المشروبات الباردة</button>
-      <button class="main-tab" data-group="hot">☕ المشروبات الساخنة</button>
+      <button class="main-tab" data-group="cold">🧃 مشروبات<br>باردة</button>
+      <button class="main-tab" data-group="hot">☕ مشروبات<br>ساخنة</button>
       <button class="main-tab" data-group="hookah">💨 الأراجيل</button>
     </div>
 
