@@ -2945,7 +2945,7 @@ function updateHero(img, name, desc, price) {
   tmp.onload = tmp.onerror = () => { imgReady = true; trySwap(); };
   tmp.src = cleanSrc;
   _heroPending = tmp;
-  _heroTimer = setTimeout(() => { timeReady = true; trySwap(); }, 280);
+  _heroTimer = setTimeout(() => { timeReady = true; trySwap(); }, 80);
   setTimeout(() => { imgReady = true; timeReady = true; trySwap(); }, 700);
 }
 
