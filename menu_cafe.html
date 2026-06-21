@@ -2932,13 +2932,11 @@ const catCounts = { crepe: '16 صنف', waffle: '12 صنف', pancake: '9 أصن�
 const heroCaption = document.getElementById('hero-caption');
 let _heroTimer = null;
 let _heroPending = null;
-let _heroFading = false;
 function updateHero(img, name, desc, price) {
   const cleanSrc = img.split('?')[0];
 
   if (_heroTimer) { clearTimeout(_heroTimer); _heroTimer = null; }
   if (_heroPending) { _heroPending.onload = _heroPending.onerror = null; _heroPending = null; }
-  if (_heroFading) { heroImg.classList.remove('fade-out'); heroCaption.classList.remove('fade-out'); _heroFading = false; }
 
   heroName.textContent = name;
   heroDesc.textContent = desc;
@@ -2960,22 +2958,31 @@ function updateHero(img, name, desc, price) {
     return;
   }
 
-  // Not yet cached — keep old image visible while new one loads in background.
-  // Only fade when the new image is actually ready, so there's never a blank state.
+  // Fade out immediately — gives instant visual feedback on mobile
+  // Swap happens after fade completes AND image is loaded (whichever is later)
+  heroImg.classList.add('fade-out');
+  heroCaption.classList.add('fade-out');
+
+  let timerDone = false;
+  let imgLoaded = false;
+  const swap = () => {
+    heroImg.src = cleanSrc;
+    heroImg.classList.remove('fade-out');
+    heroCaption.classList.remove('fade-out');
+  };
+
+  _heroTimer = setTimeout(() => {
+    _heroTimer = null;
+    timerDone = true;
+    if (imgLoaded) swap();
+  }, 180);
+
   _heroPending = tmp;
   tmp.onload = tmp.onerror = () => {
     if (!_heroPending) return;
     _heroPending = null;
-    _heroFading = true;
-    heroImg.classList.add('fade-out');
-    heroCaption.classList.add('fade-out');
-    _heroTimer = setTimeout(() => {
-      _heroTimer = null;
-      _heroFading = false;
-      heroImg.src = cleanSrc;
-      heroImg.classList.remove('fade-out');
-      heroCaption.classList.remove('fade-out');
-    }, 185);
+    imgLoaded = true;
+    if (timerDone) swap();
   };
 }
 
