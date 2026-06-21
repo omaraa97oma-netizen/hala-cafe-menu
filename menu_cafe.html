@@ -4,12 +4,31 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>هلا كافيه — المنيو</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/Cairo_700_arabic.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/El_Messiri_700_arabic.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/Cairo_400_arabic.woff2" crossorigin />
 <link rel="preload" as="image" href="assets/logo.jpg" />
 <link rel="preload" as="image" href="assets/hero/crepe_chocolate.webp" />
 <style>
+/* ═══════════════ LOCAL FONTS (no Google CDN) ════════════ */
+@font-face{font-family:"Cairo";font-style:normal;font-weight:300;font-display:swap;src:url("assets/fonts/Cairo_300_arabic.woff2") format("woff2");unicode-range:U+0600-06FF,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:"Cairo";font-style:normal;font-weight:300;font-display:swap;src:url("assets/fonts/Cairo_300_latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0100-02BA}
+@font-face{font-family:"Cairo";font-style:normal;font-weight:400;font-display:swap;src:url("assets/fonts/Cairo_400_arabic.woff2") format("woff2");unicode-range:U+0600-06FF,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:"Cairo";font-style:normal;font-weight:400;font-display:swap;src:url("assets/fonts/Cairo_400_latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0100-02BA}
+@font-face{font-family:"Cairo";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fonts/Cairo_500_arabic.woff2") format("woff2");unicode-range:U+0600-06FF,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:"Cairo";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fonts/Cairo_500_latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0100-02BA}
+@font-face{font-family:"Cairo";font-style:normal;font-weight:600;font-display:swap;src:url("assets/fonts/Cairo_600_arabic.woff2") format("woff2");unicode-range:U+0600-06FF,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:"Cairo";font-style:normal;font-weight:600;font-display:swap;src:url("assets/fonts/Cairo_600_latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0100-02BA}
+@font-face{font-family:"Cairo";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fonts/Cairo_700_arabic.woff2") format("woff2");unicode-range:U+0600-06FF,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:"Cairo";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fonts/Cairo_700_latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0100-02BA}
+@font-face{font-family:"El Messiri";font-style:normal;font-weight:400;font-display:swap;src:url("assets/fonts/El_Messiri_400_arabic.woff2") format("woff2");unicode-range:U+0600-06FF,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:"El Messiri";font-style:normal;font-weight:400;font-display:swap;src:url("assets/fonts/El_Messiri_400_latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0100-02BA}
+@font-face{font-family:"El Messiri";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fonts/El_Messiri_500_arabic.woff2") format("woff2");unicode-range:U+0600-06FF,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:"El Messiri";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fonts/El_Messiri_500_latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0100-02BA}
+@font-face{font-family:"El Messiri";font-style:normal;font-weight:600;font-display:swap;src:url("assets/fonts/El_Messiri_600_arabic.woff2") format("woff2");unicode-range:U+0600-06FF,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:"El Messiri";font-style:normal;font-weight:600;font-display:swap;src:url("assets/fonts/El_Messiri_600_latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0100-02BA}
+@font-face{font-family:"El Messiri";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fonts/El_Messiri_700_arabic.woff2") format("woff2");unicode-range:U+0600-06FF,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:"El Messiri";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fonts/El_Messiri_700_latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0100-02BA}
 /* ═══════════════════ RESET & VARS ═══════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
