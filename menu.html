@@ -96,15 +96,14 @@ body {
   flex-direction: column;
   justify-content: space-between;
 }
-#hero-img, #hero-img-next {
+#hero-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover;
-  transition: opacity .55s cubic-bezier(.4,0,.2,1), transform .6s cubic-bezier(.4,0,.2,1);
+  transition: opacity .38s ease, transform .4s ease;
 }
-#hero-img-next { opacity: 0; transform: scale(1.06); z-index: 1; }
-#hero-img-next.cf-in { opacity: 1; transform: scale(1); }
-#hero-caption { transition: opacity .35s ease, transform .38s cubic-bezier(.25,.46,.45,.94); }
-#hero-caption.fade-out { opacity: 0; transform: translateY(8px); }
+#hero-img.fade-out { opacity: 0; transform: scale(1.04); }
+#hero-caption { transition: opacity .32s ease, transform .32s ease; }
+#hero-caption.fade-out { opacity: 0; transform: translateY(6px); }
 #left-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(
@@ -273,10 +272,10 @@ body {
 
 /* Category group */
 .cat-group { padding: 0 0 12px; display: none; }
-.cat-group.show { display: block; animation: groupIn .45s cubic-bezier(.25,.46,.45,.94) both; }
+.cat-group.show { display: block; animation: groupIn .38s cubic-bezier(.25,.46,.45,.94) both; }
 @keyframes groupIn {
-  from { opacity: 0; transform: translateY(20px) scale(.98); }
-  to   { opacity: 1; transform: translateY(0)   scale(1); }
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 .cat-group-title {
   font-family: 'El Messiri', serif;
@@ -729,8 +728,7 @@ body {
 
   <!-- LEFT PANEL -->
   <div id="left-panel">
-    <img id="hero-img"      src="assets/hero/hot_espresso_single.webp" alt="" />
-    <img id="hero-img-next" src="" alt="" />
+    <img id="hero-img" src="assets/hero/hot_espresso_single.webp" alt="" />
     <div id="left-overlay"></div>
     <div id="left-brand">
       <img id="left-logo" src="assets/logo.jpg" alt="هلا كافيه" />
@@ -2879,53 +2877,41 @@ const catNames = { crepe: 'كريب', waffle: 'وافل', pancake: 'بان كي�
 const catCounts = { crepe: '16 صنف', waffle: '12 صنف', pancake: '9 أصناف', cheesecake: '7 أصناف', brownies: '4 أصناف', juices2: '9 أصناف', cocktail: '13 صنف', smoothie: '8 أصناف', milkshake: '12 صنف', mojito: '10 أصناف', energy: '6 أصناف', icedcoffee: '7 أصناف', frappe: '7 أصناف', icecream: '7 أصناف', hot2: '13 صنف', hookah: '12 صنف', sansebastian: '1 صنف' };
 
 const heroCaption = document.getElementById('hero-caption');
-const heroImgNext = document.getElementById('hero-img-next');
 let _heroTimer = null;
 let _heroPending = null;
-
 function updateHero(img, name, desc, price) {
   const cleanSrc = img.split('?')[0];
   heroName.textContent = name;
   heroDesc.textContent = desc;
   heroPrice.textContent = price;
 
+  // Cancel any in-flight transition immediately
   if (_heroTimer) { clearTimeout(_heroTimer); _heroTimer = null; }
   if (_heroPending) { _heroPending.onload = _heroPending.onerror = null; _heroPending = null; }
-  if (heroImg.getAttribute('src') === cleanSrc) return;
 
-  // Crossfade: load new image into hero-img-next, fade it in over current
-  heroImgNext.classList.remove('cf-in');
-  heroImgNext.style.opacity = '0';
-  heroImgNext.style.transform = 'scale(1.06)';
+  if (heroImg.getAttribute('src') === cleanSrc) {
+    heroImg.classList.remove('fade-out');
+    heroCaption.classList.remove('fade-out');
+    return;
+  }
+
+  heroImg.classList.add('fade-out');
   heroCaption.classList.add('fade-out');
 
-  function crossfade() {
-    heroImgNext.src = cleanSrc;
-    // Trigger crossfade on next paint
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      heroImgNext.classList.add('cf-in');
-      heroCaption.classList.remove('fade-out');
-      // After crossfade completes, promote next → current
-      _heroTimer = setTimeout(() => {
-        heroImg.src = cleanSrc;
-        heroImgNext.classList.remove('cf-in');
-        heroImgNext.style.opacity = '0';
-        heroImgNext.style.transform = 'scale(1.06)';
-        heroImgNext.src = '';
-        _heroTimer = null;
-      }, 600);
-    }));
+  function swap() {
+    heroImg.src = cleanSrc;
+    heroImg.classList.remove('fade-out');
+    heroCaption.classList.remove('fade-out');
+    _heroPending = null;
+    _heroTimer = null;
   }
 
   const tmp = new Image();
-  tmp.onload = crossfade;
-  tmp.onerror = crossfade;
+  tmp.onload = swap;
+  tmp.onerror = swap;
   tmp.src = cleanSrc;
   _heroPending = tmp;
-  // Fallback if cached (fires instantly)
-  setTimeout(() => {
-    if (_heroPending === tmp) crossfade();
-  }, 50);
+  _heroTimer = setTimeout(swap, 150);
 }
 
 /* preload only first image per category — fast & light */
