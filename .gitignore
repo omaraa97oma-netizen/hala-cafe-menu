@@ -1,2 +1,5 @@
 .claude/
 brownie_test_show.webp
+*.bak
+*.py
+assets/*.png

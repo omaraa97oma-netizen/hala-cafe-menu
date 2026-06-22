@@ -1,7 +1,44 @@
-/*
+/
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+/menu
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+/menu_cafe
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+/menu.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+/menu_cafe.html
   Cache-Control: no-cache, no-store, must-revalidate
   Pragma: no-cache
   Expires: 0
 
 /assets/*
-  Cache-Control: public, max-age=604800, immutable
+  Cache-Control: public, max-age=31536000, immutable
+  Pragma: cache
+  Expires: 31536000
+
+/style.css
+  Cache-Control: public, max-age=86400
+  Pragma: cache
+  Expires: 86400
+
+/script.js
+  Cache-Control: public, max-age=86400
+  Pragma: cache
+  Expires: 86400
