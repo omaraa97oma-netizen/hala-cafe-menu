@@ -118,12 +118,13 @@ body {
 #hero-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover;
-  transition: opacity .06s ease;
-  will-change: opacity;
+  transition: opacity .25s ease, transform .35s ease;
+  transform: scale(1);
+  will-change: opacity, transform;
 }
-#hero-img.fade-out { opacity: 0; }
-#hero-caption { transition: opacity .1s ease, transform .1s ease; will-change: opacity, transform; }
-#hero-caption.fade-out { opacity: 0; transform: translateY(4px); }
+#hero-img.fade-out { opacity: 0; transform: scale(1.04); }
+#hero-caption { transition: opacity .28s cubic-bezier(.22,1,.36,1), transform .28s cubic-bezier(.22,1,.36,1); will-change: opacity, transform; }
+#hero-caption.fade-out { opacity: 0; transform: translateY(10px); }
 #left-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(
@@ -291,10 +292,33 @@ body {
 
 /* Category group */
 .cat-group { padding: 0 0 12px; display: none; }
-.cat-group.show { display: block; animation: groupIn .4s cubic-bezier(.22,.68,0,1.2) both; will-change: opacity, transform; }
+.cat-group.show { display: block; animation: groupIn .5s cubic-bezier(.22,.68,0,1.15) both; will-change: opacity, transform; }
 @keyframes groupIn {
-  from { opacity: 0; transform: translateY(18px) scale(.98); }
+  from { opacity: 0; transform: translateY(22px) scale(.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Product list slide when switching tabs */
+#product-list.tab-switch { animation: listIn .38s cubic-bezier(.22,1,.36,1) both; }
+@keyframes listIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Tab button pop on click */
+.main-tab { transition: color .2s, border-color .2s, transform .15s; }
+.main-tab:active { transform: scale(.93); }
+.main-tab.active { animation: tabPop .25s cubic-bezier(.22,1,.36,1); }
+@keyframes tabPop {
+  0%   { transform: scale(.92); }
+  100% { transform: scale(1); }
+}
+
+/* Product row entrance */
+.product-row { animation: rowIn .35s cubic-bezier(.22,1,.36,1) both; }
+@keyframes rowIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 .cat-group-title {
   font-family: 'El Messiri', serif;
@@ -315,7 +339,12 @@ body {
   position: relative;
 }
 .product-row:hover { background: rgba(45,58,30,.04); }
-.product-row.active { background: rgba(201,168,85,.1); }
+.product-row.active { background: rgba(201,168,85,.1); animation: rowGlow .35s ease forwards; }
+@keyframes rowGlow {
+  0%   { background: rgba(201,168,85,.0); }
+  40%  { background: rgba(201,168,85,.18); }
+  100% { background: rgba(201,168,85,.1); }
+}
 .product-row.active::before {
   content: ''; position: absolute; right: 0; top: 20%; bottom: 20%;
   width: 3px; background: var(--gold); border-radius: 3px 0 0 3px;
@@ -3074,14 +3103,16 @@ function showGroup(group) {
     if (cats.includes(g.dataset.cat)) g.style.animationName = 'none';
   });
   productList.scrollTop = 0;
+  productList.classList.remove('tab-switch');
   // One reflow to commit display:none state on selected groups
   void productList.offsetHeight;
+  productList.classList.add('tab-switch');
   // Show with stagger — animationName cleared so browser re-runs groupIn
   let _si = 0;
   catGroups.forEach(g => {
     if (cats.includes(g.dataset.cat)) {
       g.style.animationName = '';
-      g.style.animationDelay = (_si++ * 20) + 'ms';
+      g.style.animationDelay = (_si++ * 45) + 'ms';
       g.classList.add('show');
     }
   });
