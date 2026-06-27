@@ -298,28 +298,16 @@ body {
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Product list slide when switching tabs */
-#product-list.tab-switch { animation: listIn .38s cubic-bezier(.22,1,.36,1) both; }
+/* Product list fade when switching tabs */
+#product-list.tab-switch { animation: listIn .38s cubic-bezier(.22,1,.36,1) forwards; }
 @keyframes listIn {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* Tab button pop on click */
 .main-tab { transition: color .2s, border-color .2s, transform .15s; }
 .main-tab:active { transform: scale(.93); }
-.main-tab.active { animation: tabPop .25s cubic-bezier(.22,1,.36,1); }
-@keyframes tabPop {
-  0%   { transform: scale(.92); }
-  100% { transform: scale(1); }
-}
-
-/* Product row entrance */
-.product-row { animation: rowIn .35s cubic-bezier(.22,1,.36,1) both; }
-@keyframes rowIn {
-  from { opacity: 0; transform: translateX(12px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
 .cat-group-title {
   font-family: 'El Messiri', serif;
   font-size: .95rem; font-weight: 700; color: var(--olive-l);
