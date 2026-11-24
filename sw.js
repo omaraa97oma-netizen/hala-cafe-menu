@@ -1,4 +1,4 @@
-const CACHE = 'hala-v6';
+const CACHE = 'hala-v7';
 
 // Fast precache — only critical files, keeps install instant
 const PRECACHE = [
